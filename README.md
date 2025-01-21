@@ -21,12 +21,13 @@ Prerequisites: JDK 17, update Intellij to the most recent version.
    editor is showing compile errors, try restarting the IDE). If the setup is correct, you should see something like the
    below as the output:
    ```
-   Hello from
    ██   ██ ██ ██████  ██████  
    ██  ██  ██ ██   ██ ██   ██ 
    █████   ██ ██████  ██████  
    ██  ██  ██ ██      ██      
    ██   ██ ██ ██      ██      
+   Hi there, this is KIPP.
+   How can I help?
    ```
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move

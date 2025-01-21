@@ -1,5 +1,5 @@
 public class Kipp {
-    private static final String NAME = "Kipp";
+    private static final String NAME = "KIPP";
     private static final String LOGO = """
             ██   ██ ██ ██████  ██████
             ██  ██  ██ ██   ██ ██   ██
@@ -8,23 +8,27 @@ public class Kipp {
             ██   ██ ██ ██      ██
             """;
 
-    public static void main(String[] args) {
-        Kipp.printGreeting();
-        Kipp.printSeparator();
-        Kipp.printGoodbye();
+    public static String getName() {
+        return Kipp.NAME;
     }
 
-    public static void printGreeting() {
-        System.out.println("Hello! I'm Kipp.");
-        System.out.println(Kipp.LOGO);
-        System.out.println("How can I assist you today?");
+    public static String getLogo() {
+        return Kipp.LOGO;
     }
 
-    public static void printGoodbye() {
-        System.out.println("Bye. Hope to see you again soon!");
+    public static String getSelfIntroduction() {
+        return "Hi there, this is " + Kipp.NAME + ".\nHow can I help?";
     }
 
-    public static void printSeparator() {
-        System.out.println("------------------------");
+    public static String getSignOut() {
+        return "Goodbye. Safe travels.";
+    }
+
+    public String getResponse(String input) {
+        if (input.equals("bye")) {
+            return Kipp.getSignOut();
+        } else {
+            return input;
+        }
     }
 }
