@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
+import ToDoList.ToDoList;
 
 public class Kipp {
     private static final String NAME = "KIPP";
@@ -11,10 +10,10 @@ public class Kipp {
             ██   ██ ██ ██      ██
             """;
 
-    private List<String> toDoList;
+    private ToDoList toDoList;
 
     public Kipp() {
-        this.toDoList = new ArrayList<String>();
+        this.toDoList = new ToDoList();
     }
 
     public static String getName() {
@@ -37,25 +36,18 @@ public class Kipp {
         if (input.equals("bye")) {
             return Kipp.getSignOut();
         } else if (input.equals("list")) {
-            return this.getToDoListItems();
-        } else {
-            return addToDoListItems(input);
+            return this.toDoList.toDisplayString();
+        } else if (input.startsWith("mark ")) {
+            int taskIdx = Integer.parseInt(input.split(" ")[1]) - 1;
+            this.toDoList.markTaskCompleted(taskIdx);
+            return "Good work, I've marked this completed.\n" + this.toDoList.getTaskDisplayString(taskIdx);
+        } else if (input.startsWith("unmark ")) {
+            int taskIdx = Integer.parseInt(input.split(" ")[1]) - 1;
+            this.toDoList.markTaskIncomplete(taskIdx);
+            return "Alright, I've marked this incomplete.\n" + this.toDoList.getTaskDisplayString(taskIdx);
         }
-    }
 
-    public String addToDoListItems(String item) {
-        this.toDoList.add(item);
-        return "added: " + item;
-    }
-
-    public String getToDoListItems() {
-        StringBuilder toDoListItems = new StringBuilder();
-        for (int i = 0; i < this.toDoList.size(); i++) {
-            toDoListItems.append((i + 1) + ". " + this.toDoList.get(i));
-            if (i != this.toDoList.size() - 1) {
-                toDoListItems.append("\n");
-            }
-        }
-        return toDoListItems.toString();
+        this.toDoList.addTask(input);
+        return "added: " + input;
     }
 }
