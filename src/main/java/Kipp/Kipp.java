@@ -27,14 +27,14 @@ public class Kipp {
 
     private void initializeCommandHandlerMap() {
         this.commandHandlerMap = new HashMap<>();
-        this.commandHandlerMap.put("hello", args -> Kipp.getSelfIntroduction());
-        this.commandHandlerMap.put("bye", args -> Kipp.getSignOut());
-        this.commandHandlerMap.put("list", args -> this.toDoList.toString());
-        this.commandHandlerMap.put("mark", this::markCommandHandler);
-        this.commandHandlerMap.put("unmark", this::unmarkCommandHandler);
-        this.commandHandlerMap.put("todo", this::addTodoCommandHandler);
-        this.commandHandlerMap.put("deadline", this::addDeadlineCommandHandler);
-        this.commandHandlerMap.put("event", this::addEventCommandHandler);
+        this.commandHandlerMap.put("hello", new CommandHandler("hello", "", args -> CommandHandler.Result.success(Kipp.getSelfIntroduction())));
+        this.commandHandlerMap.put("bye", new CommandHandler("bye", "", args -> CommandHandler.Result.success(Kipp.getSignOut())));
+        this.commandHandlerMap.put("list", new CommandHandler("list", "", this::listCommandHandler));
+        this.commandHandlerMap.put("mark", new CommandHandler("mark", "<task number>", this::setCompleteCommandHandler));
+        this.commandHandlerMap.put("unmark", new CommandHandler("unmark", "<task number>", this::setIncompleteCommandHandler));
+        this.commandHandlerMap.put("todo", new CommandHandler("todo", "<task description>", this::addTodoCommandHandler));
+        this.commandHandlerMap.put("deadline", new CommandHandler("deadline", "<task description> /by <deadline>", this::addDeadlineCommandHandler));
+        this.commandHandlerMap.put("event", new CommandHandler("event", "<task description> /from <start time> /to <end time>", this::addEventCommandHandler));
     }
 
     public static String getName() {
@@ -54,52 +54,98 @@ public class Kipp {
     }
 
     public String getResponse(String input) {
-        String[] inputWords = input.split(" ", 2);
-        String command = inputWords[0];
-        String args = inputWords.length > 1 ? inputWords[1] : "";
-
-        CommandHandler commandHandler = this.commandHandlerMap.get(command);
+        CommandHandler commandHandler = this.commandHandlerMap.get(input.split(" ", 2)[0]);
         if (commandHandler == null) {
             return Kipp.UNRECOGNIZED_COMMAND_MESSAGE;
         } else {
-            return commandHandler.getResponse(args);
+            return commandHandler.getResponse(input);
         }
     }
 
-    private String markCommandHandler(String args) {
-        int taskIdx = Integer.parseInt(args) - 1;
-        this.toDoList.setTaskComplete(taskIdx);
-        return "Good work. I've marked this task as done:\n" + this.toDoList.getTask(taskIdx).toString();
+    private CommandHandler.Result listCommandHandler(String args) {
+        return this.toDoList.getLength() == 0
+                ? CommandHandler.Result.success("You have 0 tasks on your list.")
+                : CommandHandler.Result.success(this.toDoList.toString());
     }
 
-    private String unmarkCommandHandler(String args) {
-        int taskIdx = Integer.parseInt(args) - 1;
-        this.toDoList.setTaskIncomplete(taskIdx);
-        return "Alright. I've marked this task as undone:\n" + this.toDoList.getTask(taskIdx).toString();
+    private CommandHandler.Result setCompleteCommandHandler(String args) {
+        return setCompletionCommandHandlerHelper(args, true);
     }
 
-    private String addTodoCommandHandler(String args) {
-        String taskName = args;
-        ToDoTask task = new ToDoTask(taskName);
-        this.toDoList.addTask(task);
-        return "Roger, I've added this task to the list:\n" + task.toString() + "\nNow you have " + this.toDoList.getLength() + " tasks in the list.";
+    private CommandHandler.Result setIncompleteCommandHandler(String args) {
+        return setCompletionCommandHandlerHelper(args, false);
     }
 
-    private String addDeadlineCommandHandler(String args) {
-        String argsSplit[] = args.split(" /by ");
-        String taskName = argsSplit[0];
-        String deadline = argsSplit[1];
-        DeadlineTask task = new DeadlineTask(taskName, deadline);
-        this.toDoList.addTask(task);
-        return "Roger, I've added this task to the list:\n" + task.toString() + "\nNow you have " + this.toDoList.getLength() + " tasks in the list.";
+    private CommandHandler.Result setCompletionCommandHandlerHelper(String args, boolean isComplete) {
+        int taskIdx;
+        try {
+            taskIdx = Integer.parseInt(args) - 1;
+        } catch (NumberFormatException e) {
+            return CommandHandler.Result.error("Please provide a valid task number.");
+        }
+
+        if (taskIdx < 0 || taskIdx >= this.toDoList.getLength()) {
+            return CommandHandler.Result.error(getInvalidTaskIndexMessage(taskIdx));
+        }
+
+        if (isComplete == this.toDoList.getTask(taskIdx).isCompleted()) {
+            return CommandHandler.Result.error("Task was already marked "
+                    + (isComplete ? "completed." : "incomplete.")
+                    + "I'm leaving it as is."
+                    + "\n" + this.toDoList.getTask(taskIdx).toString());
+        }
+
+        if (isComplete) {
+            this.toDoList.setTaskComplete(taskIdx);
+        } else {
+            this.toDoList.setTaskIncomplete(taskIdx);
+        }
+        return CommandHandler.Result.success("Roger that. Marking task as "
+                + (isComplete ? "completed." : "incomplete.")
+                + "\n" + this.toDoList.getTask(taskIdx).toString());
     }
 
-    private String addEventCommandHandler(String args) {
-        String argsSplit[] = args.split(" /from ");
-        String taskName = argsSplit[0];
-        String[] timeRange = argsSplit[1].split(" /to ");
-        EventTask task = new EventTask(taskName, timeRange[0], timeRange[1]);
-        this.toDoList.addTask(task);
-        return "Roger, I've added this task to the list:\n" + task.toString() + "\nNow you have " + this.toDoList.getLength() + " tasks in the list.";
+    private CommandHandler.Result addTodoCommandHandler(String args) {
+        if (args.isBlank()) {
+            return CommandHandler.Result.error("Please provide a task description.");
+        }
+
+        this.toDoList.addTask(new ToDoTask(args));
+        return CommandHandler.Result.success(this.getTaskAddedMessage());
+    }
+
+    private CommandHandler.Result addDeadlineCommandHandler(String args) {
+        String[] argsSplit = args.split(" /by ", 2);
+        if (argsSplit.length < 2) {
+            return CommandHandler.Result.error("Please provide a task description and deadline.");
+        }
+
+        this.toDoList.addTask(new DeadlineTask(argsSplit[0], argsSplit[1]));
+        return CommandHandler.Result.success(this.getTaskAddedMessage());
+    }
+
+    private CommandHandler.Result addEventCommandHandler(String args) {
+        String[] argsSplit = args.split(" /from ", 2);
+        if (argsSplit.length < 2) {
+            return CommandHandler.Result.error("Please provide a valid task description, start time and end time.");
+        }
+
+        String[] startEndTime = argsSplit[1].split(" /to ", 2);
+        if (startEndTime.length < 2) {
+            return CommandHandler.Result.error("Please provide a valid start and end time separated by /at.");
+        }
+
+        this.toDoList.addTask(new EventTask(argsSplit[0], startEndTime[0], startEndTime[1]));
+        return CommandHandler.Result.success(this.getTaskAddedMessage());
+    }
+
+    private String getTaskAddedMessage() {
+        return "Roger that, I've added the following task to your list:\n"
+                + this.toDoList.getTask(this.toDoList.getLength() - 1).toString()
+                + "\nNote, you have " + this.toDoList.getLength() + " tasks in your list.";
+    }
+
+    private static String getInvalidTaskIndexMessage(int taskIdx) {
+        return String.format("Task %d does not exist.", taskIdx + 1);
     }
 }

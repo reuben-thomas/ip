@@ -1,11 +1,24 @@
 unintelligible sounds of danger
 fantastic
+todo
 todo fix spaceship
+deadline
+deadline contact earth
+deadline contact earth /by
 deadline contact earth /by 12 June 2027
+event
+event passing black hole
+event passing black hole /from
+event passing black hole /from tomorrow
+event passing black hole /from tomorrow /to
 event passing black hole /from tomorrow /to next week
 list
 mark 1
-list
 unmark 1
+list
+mark 3
+mark 3
+unmark 3
+unmark 3
 list
 bye

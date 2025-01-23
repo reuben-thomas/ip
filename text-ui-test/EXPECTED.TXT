@@ -21,23 +21,77 @@ I don't recognize that command.
 [cooper-testuser]
 ---
 [KIPP]
-Roger, I've added this task to the list:
+Please provide a task description.
+Example: todo <task description>
+---
+[cooper-testuser]
+---
+[KIPP]
+Roger that, I've added the following task to your list:
 [T][ ] fix spaceship
-Now you have 1 tasks in the list.
+Note, you have 1 tasks in your list.
 ---
 [cooper-testuser]
 ---
 [KIPP]
-Roger, I've added this task to the list:
+Please provide a task description and deadline.
+Example: deadline <task description> /by <deadline>
+---
+[cooper-testuser]
+---
+[KIPP]
+Please provide a task description and deadline.
+Example: deadline <task description> /by <deadline>
+---
+[cooper-testuser]
+---
+[KIPP]
+Please provide a task description and deadline.
+Example: deadline <task description> /by <deadline>
+---
+[cooper-testuser]
+---
+[KIPP]
+Roger that, I've added the following task to your list:
 [D][ ] contact earth (by: 12 June 2027)
-Now you have 2 tasks in the list.
+Note, you have 2 tasks in your list.
 ---
 [cooper-testuser]
 ---
 [KIPP]
-Roger, I've added this task to the list:
+Please provide a valid task description, start time and end time.
+Example: event <task description> /from <start time> /to <end time>
+---
+[cooper-testuser]
+---
+[KIPP]
+Please provide a valid task description, start time and end time.
+Example: event <task description> /from <start time> /to <end time>
+---
+[cooper-testuser]
+---
+[KIPP]
+Please provide a valid task description, start time and end time.
+Example: event <task description> /from <start time> /to <end time>
+---
+[cooper-testuser]
+---
+[KIPP]
+Please provide a valid start and end time separated by /at.
+Example: event <task description> /from <start time> /to <end time>
+---
+[cooper-testuser]
+---
+[KIPP]
+Please provide a valid start and end time separated by /at.
+Example: event <task description> /from <start time> /to <end time>
+---
+[cooper-testuser]
+---
+[KIPP]
+Roger that, I've added the following task to your list:
 [E][ ] passing black hole (from: tomorrow to: next week)
-Now you have 3 tasks in the list.
+Note, you have 3 tasks in your list.
 ---
 [cooper-testuser]
 ---
@@ -49,21 +103,47 @@ Now you have 3 tasks in the list.
 [cooper-testuser]
 ---
 [KIPP]
-Good work. I've marked this task as done:
+Roger that. Marking task as completed.
 [T][x] fix spaceship
 ---
 [cooper-testuser]
 ---
 [KIPP]
-1. [T][x] fix spaceship
+Roger that. Marking task as incomplete.
+[T][ ] fix spaceship
+---
+[cooper-testuser]
+---
+[KIPP]
+1. [T][ ] fix spaceship
 2. [D][ ] contact earth (by: 12 June 2027)
 3. [E][ ] passing black hole (from: tomorrow to: next week)
 ---
 [cooper-testuser]
 ---
 [KIPP]
-Alright. I've marked this task as undone:
-[T][ ] fix spaceship
+Roger that. Marking task as completed.
+[E][x] passing black hole (from: tomorrow to: next week)
+---
+[cooper-testuser]
+---
+[KIPP]
+Task was already marked completed.I'm leaving it as is.
+[E][x] passing black hole (from: tomorrow to: next week)
+Example: mark <task number>
+---
+[cooper-testuser]
+---
+[KIPP]
+Roger that. Marking task as incomplete.
+[E][ ] passing black hole (from: tomorrow to: next week)
+---
+[cooper-testuser]
+---
+[KIPP]
+Task was already marked incomplete.I'm leaving it as is.
+[E][ ] passing black hole (from: tomorrow to: next week)
+Example: unmark <task number>
 ---
 [cooper-testuser]
 ---

@@ -12,7 +12,7 @@ public class KippChat {
         // If test username provided in environment variable, use it.
         if (System.getenv("KIPP_CHAT_TEST_USERNAME") != null) {
             this.username = System.getenv("KIPP_CHAT_TEST_USERNAME");
-        } else if (System.getProperty("user.name") == null) {
+        } else if (System.getProperty("user.name") != null) {
             this.username = System.getProperty("user.name");
         } else {
             this.username = "cooper";
@@ -38,7 +38,7 @@ public class KippChat {
         this.displayMessage(Kipp.getSelfIntroduction());
 
         String userInput = "";
-        while (!userInput.equals("bye")) {
+        while (!userInput.startsWith("bye")) {
             userInput = this.readUserInput();
             this.displayMessage(this.kipp.getResponse(userInput));
         }
