@@ -41,6 +41,10 @@ public final class CommandHandler {
         return this.command;
     }
 
+    public String getExampleUsage() {
+        return this.exampleUsage;
+    }
+
     public String getResponse(String input) {
         String[] inputSplit = input.split(" ", 2);
         String command = inputSplit[0];

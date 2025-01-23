@@ -19,6 +19,12 @@ public class ToDoList {
         this.taskList.add(task);
     }
 
+    public Task deleteTask(int taskIdx) {
+        Task deletedTask = this.taskList.get(taskIdx);
+        this.taskList.remove(taskIdx);
+        return deletedTask;
+    }
+
     public Task getTask(int taskIdx) {
         return this.taskList.get(taskIdx);
     }

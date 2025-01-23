@@ -2,7 +2,8 @@ package Kipp;
 
 import ToDoList.*;
 
-import java.util.HashMap;
+import javax.swing.text.html.Option;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -26,15 +27,29 @@ public class Kipp {
     }
 
     private void initializeCommandHandlerMap() {
-        this.commandHandlerMap = new HashMap<>();
-        this.commandHandlerMap.put("hello", new CommandHandler("hello", "", args -> CommandHandler.Result.success(Kipp.getSelfIntroduction())));
-        this.commandHandlerMap.put("bye", new CommandHandler("bye", "", args -> CommandHandler.Result.success(Kipp.getSignOut())));
-        this.commandHandlerMap.put("list", new CommandHandler("list", "", this::listCommandHandler));
-        this.commandHandlerMap.put("mark", new CommandHandler("mark", "<task number>", this::setCompleteCommandHandler));
-        this.commandHandlerMap.put("unmark", new CommandHandler("unmark", "<task number>", this::setIncompleteCommandHandler));
-        this.commandHandlerMap.put("todo", new CommandHandler("todo", "<task description>", this::addTodoCommandHandler));
-        this.commandHandlerMap.put("deadline", new CommandHandler("deadline", "<task description> /by <deadline>", this::addDeadlineCommandHandler));
-        this.commandHandlerMap.put("event", new CommandHandler("event", "<task description> /from <start time> /to <end time>", this::addEventCommandHandler));
+        this.commandHandlerMap = new LinkedHashMap<>();
+        this.commandHandlerMap.put("help", new CommandHandler("help", "",
+                this::helpCommandHandler));
+        this.commandHandlerMap.put("hello", new CommandHandler("hello", "",
+                args -> CommandHandler.Result.success(Kipp.getSelfIntroduction())));
+        this.commandHandlerMap.put("bye", new CommandHandler("bye", "",
+                args -> CommandHandler.Result.success(Kipp.getSignOut())));
+        this.commandHandlerMap.put("list", new CommandHandler("list", "",
+                this::listCommandHandler));
+        this.commandHandlerMap.put("mark", new CommandHandler("mark", "<task number>",
+                this::setCompleteCommandHandler));
+        this.commandHandlerMap.put("unmark", new CommandHandler("unmark", "<task number>",
+                this::setIncompleteCommandHandler));
+        this.commandHandlerMap.put("todo", new CommandHandler("todo", "<task description>",
+                this::addTodoCommandHandler));
+        this.commandHandlerMap.put("deadline", new CommandHandler("deadline",
+                "<task description> /by <deadline>",
+                this::addDeadlineCommandHandler));
+        this.commandHandlerMap.put("event", new CommandHandler("event",
+                "<task description> /from <start time> /to <end time>",
+                this::addEventCommandHandler));
+        this.commandHandlerMap.put("delete", new CommandHandler("delete", "<task number>",
+                this::deleteTaskCommandHandler));
     }
 
     public static String getName() {
@@ -69,24 +84,24 @@ public class Kipp {
     }
 
     private CommandHandler.Result setCompleteCommandHandler(String args) {
-        return setCompletionCommandHandlerHelper(args, true);
+        return this.setCompletionCommandHandlerHelper(args, true);
     }
 
     private CommandHandler.Result setIncompleteCommandHandler(String args) {
-        return setCompletionCommandHandlerHelper(args, false);
+        return this.setCompletionCommandHandlerHelper(args, false);
     }
 
     private CommandHandler.Result setCompletionCommandHandlerHelper(String args, boolean isComplete) {
-        int taskIdx;
-        try {
-            taskIdx = Integer.parseInt(args) - 1;
-        } catch (NumberFormatException e) {
-            return CommandHandler.Result.error("Please provide a valid task number.");
+        if (this.toDoList.getLength() == 0) {
+            return CommandHandler.Result.error("You have no tasks to delete.");
         }
 
-        if (taskIdx < 0 || taskIdx >= this.toDoList.getLength()) {
-            return CommandHandler.Result.error(getInvalidTaskIndexMessage(taskIdx));
+        Optional<Integer> taskIdxOpt;
+        taskIdxOpt = this.validateTaskIndex(args);
+        if (taskIdxOpt.isEmpty()) {
+            return CommandHandler.Result.error(getInvalidTaskIndexMessage());
         }
+        int taskIdx = taskIdxOpt.get();
 
         if (isComplete == this.toDoList.getTask(taskIdx).isCompleted()) {
             return CommandHandler.Result.error("Task was already marked "
@@ -103,6 +118,27 @@ public class Kipp {
         return CommandHandler.Result.success("Roger that. Marking task as "
                 + (isComplete ? "completed." : "incomplete.")
                 + "\n" + this.toDoList.getTask(taskIdx).toString());
+    }
+
+    private CommandHandler.Result deleteTaskCommandHandler(String args) {
+        if (this.toDoList.getLength() == 0) {
+            return CommandHandler.Result.error("You have no tasks to delete.");
+        }
+
+        Optional<Integer> taskIdxOpt;
+        taskIdxOpt = this.validateTaskIndex(args);
+        if (taskIdxOpt.isEmpty()) {
+            return CommandHandler.Result.error(getInvalidTaskIndexMessage());
+        }
+
+        Task deletedTask = this.toDoList.deleteTask(taskIdxOpt.get());
+        return CommandHandler.Result.success("Roger that. I've deleted the following task from your list:\n"
+                + deletedTask.toString()
+                + "\nNote, you have " + this.toDoList.getLength() + " tasks in your list.");
+    }
+
+    private static String getInvalidTaskIndexMessage() {
+        return "Please provide a valid task number.";
     }
 
     private CommandHandler.Result addTodoCommandHandler(String args) {
@@ -139,13 +175,36 @@ public class Kipp {
         return CommandHandler.Result.success(this.getTaskAddedMessage());
     }
 
+    private CommandHandler.Result helpCommandHandler(String args) {
+        String[] commands = this.commandHandlerMap.keySet().toArray(new String[0]);
+
+        StringBuilder helpMessage = new StringBuilder("Hi there, here are some commands to get started:\n");
+        for (String command : commands) {
+            helpMessage.append(this.commandHandlerMap.get(command).getExampleUsage()).append("\n");
+        }
+        helpMessage.setLength(helpMessage.length() - 1);
+
+        return CommandHandler.Result.success(helpMessage.toString());
+    }
+
     private String getTaskAddedMessage() {
         return "Roger that, I've added the following task to your list:\n"
                 + this.toDoList.getTask(this.toDoList.getLength() - 1).toString()
                 + "\nNote, you have " + this.toDoList.getLength() + " tasks in your list.";
     }
 
-    private static String getInvalidTaskIndexMessage(int taskIdx) {
-        return String.format("Task %d does not exist.", taskIdx + 1);
+    private Optional<Integer> validateTaskIndex(String args) {
+        int taskIdx;
+        try {
+            taskIdx = Integer.parseInt(args) - 1;
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
+
+        if (taskIdx < 0 || taskIdx >= this.toDoList.getLength()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(taskIdx);
     }
 }

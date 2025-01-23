@@ -1,5 +1,6 @@
 unintelligible sounds of danger
 fantastic
+delete 1
 todo
 todo fix spaceship
 deadline
@@ -20,5 +21,7 @@ mark 3
 mark 3
 unmark 3
 unmark 3
+list
+delete 3
 list
 bye
