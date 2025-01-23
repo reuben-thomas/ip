@@ -1,11 +1,13 @@
 import java.util.Scanner;
 
-public class KippChat {
+import Kipp.*;
+
+public class Chat {
     private final Kipp kipp;
     private final String username;
     private final Scanner scanner;
 
-    public KippChat() {
+    public Chat() {
         this.kipp = new Kipp();
         this.username = System.getProperty("user.name");
         this.scanner = new Scanner(System.in);
@@ -20,7 +22,7 @@ public class KippChat {
     }
 
     public static void main(String[] args) {
-        KippChat chat = new KippChat();
+        Chat chat = new Chat();
         chat.run();
     }
 
@@ -36,15 +38,15 @@ public class KippChat {
     }
 
     private void displayMessage(String message) {
-        KippChat.printNameBadge(Kipp.getName());
+        Chat.printNameBadge(Kipp.getName());
         System.out.println(message);
-        KippChat.printSeparator();
+        Chat.printSeparator();
     }
 
     private String readUserInput() {
-        KippChat.printNameBadge(this.username);
+        Chat.printNameBadge(this.username);
         String userInput = this.scanner.nextLine();
-        KippChat.printSeparator();
+        Chat.printSeparator();
         return userInput;
     }
 }

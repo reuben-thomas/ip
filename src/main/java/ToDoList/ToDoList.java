@@ -1,62 +1,49 @@
 package ToDoList;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ToDoList {
 
-    private Map<String, Task> taskList;
+    private List<Task> taskList;
 
     public ToDoList() {
-        this.taskList = new LinkedHashMap<String, Task>();
+        this.taskList = new ArrayList<Task>();
     }
 
-    public void addTask(String taskName) {
-        this.taskList.put(taskName, new Task());
+    public int getLength() {
+        return this.taskList.size();
     }
 
-    private String taskIndexToName(int taskIdx) {
-        return this.taskList.keySet().stream().toList().get(taskIdx);
+    public void addTask(Task task) {
+        this.taskList.add(task);
     }
 
-    public String getTaskDisplayString(int taskIdx) {
-        return this.getTaskDisplayString(this.taskIndexToName(taskIdx));
+    public Task getTask(int taskIdx) {
+        return this.taskList.get(taskIdx);
     }
 
-    private String getTaskDisplayString(String taskName) {
-        String taskDisplayString = "";
-        if (this.taskList.get(taskName).isCompleted()) {
-            taskDisplayString += "[x] ";
-        } else {
-            taskDisplayString += "[ ] ";
-        }
-        return taskDisplayString += taskName;
+    public void setTaskComplete(int taskIdx) {
+        this.taskList.get(taskIdx).setComplete();
     }
 
-    public void markTaskCompleted(int taskIdx) {
-        this.taskList.get(this.taskIndexToName(taskIdx)).markCompleted();
+    public void setTaskIncomplete(int taskIdx) {
+        this.taskList.get(taskIdx).setIncomplete();
     }
 
-    public void markTaskIncomplete(int taskIdx) {
-        this.taskList.get(this.taskIndexToName(taskIdx)).markIncomplete();
-    }
-
-    public String toDisplayString() {
+    @Override
+    public String toString() {
         if (this.taskList.isEmpty()) {
             return "No tasks to display.";
         }
 
         StringBuilder str = new StringBuilder();
         int taskNumber = 1;
-        for (Map.Entry<String, Task> nameTaskEntry : this.taskList.entrySet()) {
-            str.append(taskNumber)
-                    .append(". ")
-                    .append(this.getTaskDisplayString(nameTaskEntry.getKey()));
-            if (taskNumber != this.taskList.size()) {
-                str.append("\n");
-            }
+        for (Task task : this.taskList) {
+            str.append(String.format("%d. %s\n", taskNumber, task.toString()));
             taskNumber++;
         }
+        str.setLength(str.length() - 1);
         return str.toString();
     }
 }
