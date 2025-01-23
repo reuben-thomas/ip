@@ -2,14 +2,21 @@ import java.util.Scanner;
 
 import Kipp.*;
 
-public class Chat {
+public class KippChat {
     private final Kipp kipp;
     private final String username;
     private final Scanner scanner;
 
-    public Chat() {
+    public KippChat() {
         this.kipp = new Kipp();
-        this.username = System.getProperty("user.name");
+        // If test username provided in environment variable, use it.
+        if (System.getenv("KIPP_CHAT_TEST_USERNAME") != null) {
+            this.username = System.getenv("KIPP_CHAT_TEST_USERNAME");
+        } else if (System.getProperty("user.name") == null) {
+            this.username = System.getProperty("user.name");
+        } else {
+            this.username = "cooper";
+        }
         this.scanner = new Scanner(System.in);
     }
 
@@ -22,7 +29,7 @@ public class Chat {
     }
 
     public static void main(String[] args) {
-        Chat chat = new Chat();
+        KippChat chat = new KippChat();
         chat.run();
     }
 
@@ -38,15 +45,15 @@ public class Chat {
     }
 
     private void displayMessage(String message) {
-        Chat.printNameBadge(Kipp.getName());
+        KippChat.printNameBadge(Kipp.getName());
         System.out.println(message);
-        Chat.printSeparator();
+        KippChat.printSeparator();
     }
 
     private String readUserInput() {
-        Chat.printNameBadge(this.username);
+        KippChat.printNameBadge(this.username);
         String userInput = this.scanner.nextLine();
-        Chat.printSeparator();
+        KippChat.printSeparator();
         return userInput;
     }
 }

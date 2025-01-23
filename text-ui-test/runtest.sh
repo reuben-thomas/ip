@@ -19,9 +19,10 @@ then
     exit 1
 fi
 
-# set test username environment variable
-export KIPP_CHAT_TEST_USERNAME="testuser"
+# set test username environment variable, and run the test
+export KIPP_CHAT_TEST_USERNAME="cooper-testuser"
 java -classpath ../bin KippChat < input.txt > ACTUAL.TXT
+unset KIPP_CHAT_TEST_USERNAME
 
 # convert to UNIX format
 cp EXPECTED.TXT EXPECTED-UNIX.TXT

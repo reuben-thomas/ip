@@ -67,13 +67,13 @@ public class Kipp {
     }
 
     private String markCommandHandler(String args) {
-        int taskIdx = Integer.parseInt(args);
+        int taskIdx = Integer.parseInt(args) - 1;
         this.toDoList.setTaskComplete(taskIdx);
         return "Good work. I've marked this task as done:\n" + this.toDoList.getTask(taskIdx).toString();
     }
 
     private String unmarkCommandHandler(String args) {
-        int taskIdx = Integer.parseInt(args);
+        int taskIdx = Integer.parseInt(args) - 1;
         this.toDoList.setTaskIncomplete(taskIdx);
         return "Alright. I've marked this task as undone:\n" + this.toDoList.getTask(taskIdx).toString();
     }
