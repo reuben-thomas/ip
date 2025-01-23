@@ -19,8 +19,9 @@ then
     exit 1
 fi
 
-# run the program, feed commands from input.txt file and redirect the output to the ACTUAL.TXT
-java -classpath ../bin Kipp < input.txt > ACTUAL.TXT
+# set test username environment variable
+export KIPP_CHAT_TEST_USERNAME="testuser"
+java -classpath ../bin KippChat < input.txt > ACTUAL.TXT
 
 # convert to UNIX format
 cp EXPECTED.TXT EXPECTED-UNIX.TXT
