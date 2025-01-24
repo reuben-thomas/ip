@@ -1,6 +1,8 @@
 package ToDoList;
 
-public abstract class Task {
+import java.io.Serializable;
+
+public abstract class Task implements Serializable {
     private boolean isCompleted;
     private String taskName;
 

@@ -21,12 +21,6 @@ I don't recognize that command.
 [cooper-testuser]
 ---
 [KIPP]
-You have no tasks to delete.
-Example: delete <task number>
----
-[cooper-testuser]
----
-[KIPP]
 Please provide a task description.
 Example: todo <task description>
 ---
@@ -161,6 +155,11 @@ Example: unmark <task number>
 [cooper-testuser]
 ---
 [KIPP]
+I've saved your todo list to KIPP.txt.
+---
+[cooper-testuser]
+---
+[KIPP]
 Roger that. I've deleted the following task from your list:
 [E][ ] passing black hole (from: tomorrow to: next week)
 Note, you have 2 tasks in your list.
@@ -170,6 +169,43 @@ Note, you have 2 tasks in your list.
 [KIPP]
 1. [T][ ] fix spaceship
 2. [D][ ] contact earth (by: 12 June 2027)
+---
+[cooper-testuser]
+---
+[KIPP]
+Roger that. I've deleted the following task from your list:
+[D][ ] contact earth (by: 12 June 2027)
+Note, you have 1 tasks in your list.
+---
+[cooper-testuser]
+---
+[KIPP]
+1. [T][ ] fix spaceship
+---
+[cooper-testuser]
+---
+[KIPP]
+Roger that. I've deleted the following task from your list:
+[T][ ] fix spaceship
+Note, you have 0 tasks in your list.
+---
+[cooper-testuser]
+---
+[KIPP]
+You have no tasks to delete.
+Example: delete <task number>
+---
+[cooper-testuser]
+---
+[KIPP]
+I've loaded your todo list from KIPP.txt.
+---
+[cooper-testuser]
+---
+[KIPP]
+1. [T][ ] fix spaceship
+2. [D][ ] contact earth (by: 12 June 2027)
+3. [E][ ] passing black hole (from: tomorrow to: next week)
 ---
 [cooper-testuser]
 ---
