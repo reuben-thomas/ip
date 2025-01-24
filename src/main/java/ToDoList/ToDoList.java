@@ -1,9 +1,10 @@
 package ToDoList;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ToDoList {
+public class ToDoList implements Serializable {
 
     private List<Task> taskList;
 

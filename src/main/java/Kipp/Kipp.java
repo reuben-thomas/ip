@@ -2,10 +2,13 @@ package Kipp;
 
 import ToDoList.*;
 
-import javax.swing.text.html.Option;
+import java.io.*;
+import java.sql.Array;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.io.FileNotFoundException;
 
 public class Kipp {
     private static final String LOGO = """
@@ -16,6 +19,7 @@ public class Kipp {
             ██   ██ ██ ██      ██
             """;
     private static final String NAME = "KIPP";
+    private static final String SAVE_FILE_NAME = "KIPP.txt";
     private static final String UNRECOGNIZED_COMMAND_MESSAGE = "I don't recognize that command.";
 
     private Map<String, CommandHandler> commandHandlerMap;
@@ -50,6 +54,10 @@ public class Kipp {
                 this::addEventCommandHandler));
         this.commandHandlerMap.put("delete", new CommandHandler("delete", "<task number>",
                 this::deleteTaskCommandHandler));
+        this.commandHandlerMap.put("save", new CommandHandler("save", "",
+                this::saveCommandHandler));
+        this.commandHandlerMap.put("load", new CommandHandler("load", "",
+                this::loadCommandHandler));
     }
 
     public static String getName() {
@@ -68,13 +76,65 @@ public class Kipp {
         return "Goodbye. Safe travels.";
     }
 
-    public String getResponse(String input) {
-        CommandHandler commandHandler = this.commandHandlerMap.get(input.split(" ", 2)[0]);
+    public String getResponse(String inputCommand) {
+        CommandHandler commandHandler = this.commandHandlerMap.get(inputCommand.split(" ", 2)[0]);
         if (commandHandler == null) {
             return Kipp.UNRECOGNIZED_COMMAND_MESSAGE;
         } else {
-            return commandHandler.getResponse(input);
+            return commandHandler.getResponse(inputCommand);
         }
+    }
+
+    public String getResponse(String[] inputCommands) {
+        StringBuilder response = new StringBuilder();
+        for (String inputCommand : inputCommands) {
+            response.append(this.getResponse(inputCommand)).append("\n");
+        }
+        response.setLength(response.length() - 1);
+        return response.toString();
+    }
+
+    // Approach to serializing and deserializing objects adapted from:
+    // https://www.geeksforgeeks.org/serialization-in-java/
+    private CommandHandler.Result saveCommandHandler(String args) {
+        try {
+            File file = new File(Kipp.SAVE_FILE_NAME);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            FileOutputStream fileOut = new FileOutputStream(Kipp.SAVE_FILE_NAME);
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(this.toDoList);
+            objectOut.close();
+            fileOut.close();
+        } catch (Exception e) {
+            return CommandHandler.Result.error("Something went wrong, I couldn't save your todo list.");
+        }
+        return CommandHandler.Result.success("I've saved your todo list to "
+                + Kipp.SAVE_FILE_NAME + ".");
+    }
+
+    // Approach to serializing and deserializing objects adapted from:
+    // https://www.geeksforgeeks.org/serialization-in-java/
+    private CommandHandler.Result loadCommandHandler(String args) {
+        File file = new File(Kipp.SAVE_FILE_NAME);
+        if (!file.exists()) {
+            return CommandHandler.Result.error("Sorry, it seems you don't have a saved todo list at "
+                    + Kipp.SAVE_FILE_NAME + ". I'm leaving it as is.");
+        }
+
+        try {
+            FileInputStream fileIn = new FileInputStream(Kipp.SAVE_FILE_NAME);
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+            this.toDoList = (ToDoList) objectIn.readObject();
+            objectIn.close();
+            fileIn.close();
+        } catch (Exception e) {
+            return CommandHandler.Result.error("Something went wrong, I couldn't load your todo list. I'm leaving it as is.");
+        }
+        return CommandHandler.Result.success("I've loaded your todo list from "
+                + Kipp.SAVE_FILE_NAME + ".");
     }
 
     private CommandHandler.Result listCommandHandler(String args) {
