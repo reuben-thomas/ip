@@ -1,14 +1,14 @@
-package ToDoList;
+package TaskManager;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ToDoList implements Serializable {
+public class TaskManager implements Serializable {
 
     private List<Task> taskList;
 
-    public ToDoList() {
+    public TaskManager() {
         this.taskList = new ArrayList<Task>();
     }
 

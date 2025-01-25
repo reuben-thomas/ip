@@ -1,6 +1,4 @@
-package ToDoList;
-
-import java.util.Date;
+package TaskManager;
 
 public class DeadlineTask extends Task {
     private String deadline;

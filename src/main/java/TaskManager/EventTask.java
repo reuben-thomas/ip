@@ -1,6 +1,4 @@
-package ToDoList;
-
-import java.util.Date;
+package TaskManager;
 
 public class EventTask extends Task {
     private String startDate;

@@ -1,4 +1,4 @@
-package ToDoList;
+package TaskManager;
 
 import java.io.Serializable;
 
@@ -37,10 +37,10 @@ public abstract class Task implements Serializable {
 
     @Override
     public final String toString() {
-        String displayString = String.format("[%s][%s] %s", this.getTypeSymbol(), this.getCompletedSymbol(), this.getTaskName());
+        String string = String.format("[%s][%s] %s", this.getTypeSymbol(), this.getCompletedSymbol(), this.getTaskName());
         if (!this.getAdditionalInfo().isEmpty()) {
-            displayString += String.format(" (%s)", this.getAdditionalInfo());
+            string += String.format(" (%s)", this.getAdditionalInfo());
         }
-        return displayString;
+        return string;
     }
 }

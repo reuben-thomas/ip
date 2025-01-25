@@ -1,7 +1,6 @@
 import java.util.Scanner;
 
 import Kipp.*;
-import ToDoList.ToDoList;
 
 public class KippChat {
     private final Kipp kipp;

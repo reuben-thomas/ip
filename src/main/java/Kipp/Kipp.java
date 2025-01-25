@@ -1,14 +1,11 @@
 package Kipp;
 
-import ToDoList.*;
+import TaskManager.*;
 
 import java.io.*;
-import java.sql.Array;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.io.FileNotFoundException;
 
 public class Kipp {
     private static final String LOGO = """
@@ -23,10 +20,10 @@ public class Kipp {
     private static final String UNRECOGNIZED_COMMAND_MESSAGE = "I don't recognize that command.";
 
     private Map<String, CommandHandler> commandHandlerMap;
-    private ToDoList toDoList;
+    private TaskManager taskManager;
 
     public Kipp() {
-        this.toDoList = new ToDoList();
+        this.taskManager = new TaskManager();
         this.initializeCommandHandlerMap();
     }
 
@@ -105,7 +102,7 @@ public class Kipp {
 
             FileOutputStream fileOut = new FileOutputStream(Kipp.SAVE_FILE_NAME);
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            objectOut.writeObject(this.toDoList);
+            objectOut.writeObject(this.taskManager);
             objectOut.close();
             fileOut.close();
         } catch (Exception e) {
@@ -127,7 +124,7 @@ public class Kipp {
         try {
             FileInputStream fileIn = new FileInputStream(Kipp.SAVE_FILE_NAME);
             ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-            this.toDoList = (ToDoList) objectIn.readObject();
+            this.taskManager = (TaskManager) objectIn.readObject();
             objectIn.close();
             fileIn.close();
         } catch (Exception e) {
@@ -138,9 +135,9 @@ public class Kipp {
     }
 
     private CommandHandler.Result listCommandHandler(String args) {
-        return this.toDoList.getLength() == 0
+        return this.taskManager.getLength() == 0
                 ? CommandHandler.Result.success("You have 0 tasks on your list.")
-                : CommandHandler.Result.success(this.toDoList.toString());
+                : CommandHandler.Result.success(this.taskManager.toString());
     }
 
     private CommandHandler.Result setCompleteCommandHandler(String args) {
@@ -152,7 +149,7 @@ public class Kipp {
     }
 
     private CommandHandler.Result setCompletionCommandHandlerHelper(String args, boolean isComplete) {
-        if (this.toDoList.getLength() == 0) {
+        if (this.taskManager.getLength() == 0) {
             return CommandHandler.Result.error("You have no tasks to delete.");
         }
 
@@ -163,25 +160,25 @@ public class Kipp {
         }
         int taskIdx = taskIdxOpt.get();
 
-        if (isComplete == this.toDoList.getTask(taskIdx).isCompleted()) {
+        if (isComplete == this.taskManager.getTask(taskIdx).isCompleted()) {
             return CommandHandler.Result.error("Task was already marked "
                     + (isComplete ? "completed." : "incomplete.")
                     + "I'm leaving it as is."
-                    + "\n" + this.toDoList.getTask(taskIdx).toString());
+                    + "\n" + this.taskManager.getTask(taskIdx).toString());
         }
 
         if (isComplete) {
-            this.toDoList.setTaskComplete(taskIdx);
+            this.taskManager.setTaskComplete(taskIdx);
         } else {
-            this.toDoList.setTaskIncomplete(taskIdx);
+            this.taskManager.setTaskIncomplete(taskIdx);
         }
         return CommandHandler.Result.success("Roger that. Marking task as "
                 + (isComplete ? "completed." : "incomplete.")
-                + "\n" + this.toDoList.getTask(taskIdx).toString());
+                + "\n" + this.taskManager.getTask(taskIdx).toString());
     }
 
     private CommandHandler.Result deleteTaskCommandHandler(String args) {
-        if (this.toDoList.getLength() == 0) {
+        if (this.taskManager.getLength() == 0) {
             return CommandHandler.Result.error("You have no tasks to delete.");
         }
 
@@ -191,10 +188,10 @@ public class Kipp {
             return CommandHandler.Result.error(getInvalidTaskIndexMessage());
         }
 
-        Task deletedTask = this.toDoList.deleteTask(taskIdxOpt.get());
+        Task deletedTask = this.taskManager.deleteTask(taskIdxOpt.get());
         return CommandHandler.Result.success("Roger that. I've deleted the following task from your list:\n"
                 + deletedTask.toString()
-                + "\nNote, you have " + this.toDoList.getLength() + " tasks in your list.");
+                + "\nNote, you have " + this.taskManager.getLength() + " tasks in your list.");
     }
 
     private static String getInvalidTaskIndexMessage() {
@@ -206,7 +203,7 @@ public class Kipp {
             return CommandHandler.Result.error("Please provide a task description.");
         }
 
-        this.toDoList.addTask(new ToDoTask(args));
+        this.taskManager.addTask(new ToDoTask(args));
         return CommandHandler.Result.success(this.getTaskAddedMessage());
     }
 
@@ -216,7 +213,7 @@ public class Kipp {
             return CommandHandler.Result.error("Please provide a task description and deadline.");
         }
 
-        this.toDoList.addTask(new DeadlineTask(argsSplit[0], argsSplit[1]));
+        this.taskManager.addTask(new DeadlineTask(argsSplit[0], argsSplit[1]));
         return CommandHandler.Result.success(this.getTaskAddedMessage());
     }
 
@@ -231,7 +228,7 @@ public class Kipp {
             return CommandHandler.Result.error("Please provide a valid start and end time separated by /at.");
         }
 
-        this.toDoList.addTask(new EventTask(argsSplit[0], startEndTime[0], startEndTime[1]));
+        this.taskManager.addTask(new EventTask(argsSplit[0], startEndTime[0], startEndTime[1]));
         return CommandHandler.Result.success(this.getTaskAddedMessage());
     }
 
@@ -249,8 +246,8 @@ public class Kipp {
 
     private String getTaskAddedMessage() {
         return "Roger that, I've added the following task to your list:\n"
-                + this.toDoList.getTask(this.toDoList.getLength() - 1).toString()
-                + "\nNote, you have " + this.toDoList.getLength() + " tasks in your list.";
+                + this.taskManager.getTask(this.taskManager.getLength() - 1).toString()
+                + "\nNote, you have " + this.taskManager.getLength() + " tasks in your list.";
     }
 
     private Optional<Integer> validateTaskIndex(String args) {
@@ -261,7 +258,7 @@ public class Kipp {
             return Optional.empty();
         }
 
-        if (taskIdx < 0 || taskIdx >= this.toDoList.getLength()) {
+        if (taskIdx < 0 || taskIdx >= this.taskManager.getLength()) {
             return Optional.empty();
         }
 
