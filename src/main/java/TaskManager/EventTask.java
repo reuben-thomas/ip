@@ -1,10 +1,13 @@
 package TaskManager;
 
-public class EventTask extends Task {
-    private String startDate;
-    private String endDate;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-    public EventTask(String taskName, String startDate, String endDate) {
+public class EventTask extends Task {
+    private LocalDate startDate;
+    private LocalDate endDate;
+
+    public EventTask(String taskName, LocalDate startDate, LocalDate endDate) {
         super(taskName);
         this.startDate = startDate;
         this.endDate = endDate;
@@ -17,6 +20,9 @@ public class EventTask extends Task {
 
     @Override
     public String getAdditionalInfo() {
-        return String.format("from: %s to: %s", this.startDate, this.endDate);
+        return String.format("from: %s to: %s",
+                this.startDate.format(DateTimeFormatter.ofPattern("MMM d yyyy")),
+                this.endDate.format(DateTimeFormatter.ofPattern("MMM d yyyy"))
+        );
     }
 }

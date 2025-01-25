@@ -1,9 +1,6 @@
 package Kipp;
 
-import javax.swing.text.html.Option;
-import java.util.function.Function;
 import java.util.Optional;
-import java.util.logging.Handler;
 
 public final class CommandHandler {
     private final String command;
