@@ -6,11 +6,6 @@ import TaskList.Task;
 import TaskList.TaskList;
 import TaskList.ToDoTask;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -25,14 +20,15 @@ public class Kipp {
             ██   ██ ██ ██      ██
             """;
     private static final String NAME = "KIPP";
-    private static final String SAVE_FILE_NAME = "KIPP.txt";
+    private static final String TASK_LIST_SAVE_FILE_PATH = "KIPP.txt";
     private static final String UNRECOGNIZED_COMMAND_MESSAGE = "I don't recognize that command.";
-
-    private Map<String, CommandHandler> commandHandlerMap;
+    private final Storage<TaskList> taskListStorage;
     private TaskList taskList;
+    private Map<String, CommandHandler> commandHandlerMap;
 
     public Kipp() {
         this.taskList = new TaskList();
+        this.taskListStorage = new Storage<>(Kipp.TASK_LIST_SAVE_FILE_PATH, TaskList.class);
         this.initializeCommandHandlerMap();
     }
 
@@ -108,43 +104,26 @@ public class Kipp {
     // https://www.geeksforgeeks.org/serialization-in-java/
     private CommandHandler.Result saveCommandHandler(String args) {
         try {
-            File file = new File(Kipp.SAVE_FILE_NAME);
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-
-            FileOutputStream fileOut = new FileOutputStream(Kipp.SAVE_FILE_NAME);
-            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            objectOut.writeObject(this.taskList);
-            objectOut.close();
-            fileOut.close();
-        } catch (Exception e) {
-            return CommandHandler.Result.error("Something went wrong, I couldn't save your todo list.");
+            this.taskListStorage.save(this.taskList);
+        } catch (StorageException e) {
+            return CommandHandler.Result.error("Something went wrong, I couldn't save your task list to "
+                    + Kipp.TASK_LIST_SAVE_FILE_PATH + ". I'm leaving it as is.");
         }
-        return CommandHandler.Result.success("I've saved your todo list to "
-                + Kipp.SAVE_FILE_NAME + ".");
+        return CommandHandler.Result.success("I've saved your task list to "
+                + Kipp.TASK_LIST_SAVE_FILE_PATH + ".");
     }
 
     // Approach to serializing and deserializing objects adapted from:
     // https://www.geeksforgeeks.org/serialization-in-java/
     private CommandHandler.Result loadCommandHandler(String args) {
-        File file = new File(Kipp.SAVE_FILE_NAME);
-        if (!file.exists()) {
-            return CommandHandler.Result.error("Sorry, it seems you don't have a saved todo list at "
-                    + Kipp.SAVE_FILE_NAME + ". I'm leaving it as is.");
-        }
-
         try {
-            FileInputStream fileIn = new FileInputStream(Kipp.SAVE_FILE_NAME);
-            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-            this.taskList = (TaskList) objectIn.readObject();
-            objectIn.close();
-            fileIn.close();
-        } catch (Exception e) {
-            return CommandHandler.Result.error("Something went wrong, I couldn't load your todo list. I'm leaving it as is.");
+            this.taskList = this.taskListStorage.load();
+        } catch (StorageException e) {
+            return CommandHandler.Result.error("Something went wrong, I couldn't load your task list from "
+                    + Kipp.TASK_LIST_SAVE_FILE_PATH + ". I'm leaving it as is.");
         }
-        return CommandHandler.Result.success("I've loaded your todo list from "
-                + Kipp.SAVE_FILE_NAME + ".");
+        return CommandHandler.Result.success("I've loaded your task list from "
+                + Kipp.TASK_LIST_SAVE_FILE_PATH + ".");
     }
 
     private CommandHandler.Result listCommandHandler(String args) {
@@ -162,10 +141,6 @@ public class Kipp {
     }
 
     private CommandHandler.Result setCompletionCommandHandlerHelper(String args, boolean isComplete) {
-        if (this.taskList.getLength() == 0) {
-            return CommandHandler.Result.error("You have no tasks to delete.");
-        }
-
         Optional<Integer> taskIdxOpt;
         taskIdxOpt = this.validateTaskIndex(args);
         if (taskIdxOpt.isEmpty()) {
@@ -191,10 +166,6 @@ public class Kipp {
     }
 
     private CommandHandler.Result deleteTaskCommandHandler(String args) {
-        if (this.taskList.getLength() == 0) {
-            return CommandHandler.Result.error("You have no tasks to delete.");
-        }
-
         Optional<Integer> taskIdxOpt;
         taskIdxOpt = this.validateTaskIndex(args);
         if (taskIdxOpt.isEmpty()) {
