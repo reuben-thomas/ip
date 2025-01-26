@@ -36,6 +36,8 @@ public class KippChat {
     public void run() {
         System.out.println(Kipp.getLogo());
 
+        this.kipp.getResponse("load");
+
         this.displayMessage(new String[]{
                 this.kipp.getResponse("hello"),
         });
