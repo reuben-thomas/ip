@@ -7,21 +7,6 @@ public final class CommandHandler {
     private final String exampleUsage;
     private final HandlerFunction handlerFunction;
 
-    @FunctionalInterface
-    public interface HandlerFunction {
-        Result apply(String args);
-    }
-
-    public record Result(Optional<String> response, Optional<String> errorMessage) {
-        public static Result success(String response) {
-            return new Result(Optional.of(response), Optional.empty());
-        }
-
-        public static Result error(String errorMessage) {
-            return new Result(Optional.empty(), Optional.of(errorMessage));
-        }
-    }
-
     public CommandHandler(String command, HandlerFunction handlerFunction) {
         this.command = command;
         this.exampleUsage = this.command;
@@ -56,6 +41,21 @@ public final class CommandHandler {
             return result.errorMessage().orElseGet(() -> "Invalid usage") + "\nExample: " + this.exampleUsage;
         } else {
             throw new IllegalStateException("Result must have either response or error message.");
+        }
+    }
+
+    @FunctionalInterface
+    public interface HandlerFunction {
+        Result apply(String args);
+    }
+
+    public record Result(Optional<String> response, Optional<String> errorMessage) {
+        public static Result success(String response) {
+            return new Result(Optional.of(response), Optional.empty());
+        }
+
+        public static Result error(String errorMessage) {
+            return new Result(Optional.empty(), Optional.of(errorMessage));
         }
     }
 }

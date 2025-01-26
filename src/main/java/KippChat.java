@@ -1,6 +1,6 @@
-import java.util.Scanner;
+import Kipp.Kipp;
 
-import Kipp.*;
+import java.util.Scanner;
 
 public class KippChat {
     private final Kipp kipp;

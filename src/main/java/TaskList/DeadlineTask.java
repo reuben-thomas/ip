@@ -1,10 +1,10 @@
-package TaskManager;
+package TaskList;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class DeadlineTask extends Task {
-    private LocalDate deadlineDate;
+    private final LocalDate deadlineDate;
 
     public DeadlineTask(String taskName, LocalDate deadlineDate) {
         super(taskName);

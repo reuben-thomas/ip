@@ -1,10 +1,10 @@
-package TaskManager;
+package TaskList;
 
 import java.io.Serializable;
 
 public abstract class Task implements Serializable {
     private boolean isCompleted;
-    private String taskName;
+    private final String taskName;
 
     public Task(String taskName) {
         this.isCompleted = false;

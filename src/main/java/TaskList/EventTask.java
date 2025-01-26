@@ -1,11 +1,11 @@
-package TaskManager;
+package TaskList;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class EventTask extends Task {
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private final LocalDate startDate;
+    private final LocalDate endDate;
 
     public EventTask(String taskName, LocalDate startDate, LocalDate endDate) {
         super(taskName);
