@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.time.LocalDate;
 
 public class Kipp {
     private static final String LOGO = """
@@ -44,10 +45,10 @@ public class Kipp {
         this.commandHandlerMap.put("todo", new CommandHandler("todo", "<task description>",
                 this::addTodoCommandHandler));
         this.commandHandlerMap.put("deadline", new CommandHandler("deadline",
-                "<task description> /by <deadline>",
+                "<task description> /by <deadline yyyy-mm-dd>",
                 this::addDeadlineCommandHandler));
         this.commandHandlerMap.put("event", new CommandHandler("event",
-                "<task description> /from <start time> /to <end time>",
+                "<task description> /from <start yyyy-mm-dd> /to <end yyyy-mm-dd>",
                 this::addEventCommandHandler));
         this.commandHandlerMap.put("delete", new CommandHandler("delete", "<task number>",
                 this::deleteTaskCommandHandler));
@@ -213,7 +214,14 @@ public class Kipp {
             return CommandHandler.Result.error("Please provide a task description and deadline.");
         }
 
-        this.taskManager.addTask(new DeadlineTask(argsSplit[0], argsSplit[1]));
+        LocalDate deadlineDate;
+        try {
+            deadlineDate = LocalDate.parse(argsSplit[1]);
+        } catch (Exception e) {
+            return CommandHandler.Result.error("Please provide a valid deadline in the format yyyy-mm-dd.");
+        }
+
+        this.taskManager.addTask(new DeadlineTask(argsSplit[0], deadlineDate));
         return CommandHandler.Result.success(this.getTaskAddedMessage());
     }
 
@@ -223,12 +231,20 @@ public class Kipp {
             return CommandHandler.Result.error("Please provide a valid task description, start time and end time.");
         }
 
-        String[] startEndTime = argsSplit[1].split(" /to ", 2);
-        if (startEndTime.length < 2) {
-            return CommandHandler.Result.error("Please provide a valid start and end time separated by /at.");
+        String[] startEndDate = argsSplit[1].split(" /to ", 2);
+        LocalDate startDate;
+        LocalDate endDate;
+        try {
+            if (startEndDate.length < 2) {
+                throw new IllegalArgumentException("Insufficient arguments.");
+            }
+            startDate = LocalDate.parse(startEndDate[0]);
+            endDate = LocalDate.parse(startEndDate[1]);
+        } catch (Exception e) {
+            return CommandHandler.Result.error("Please provide a valid start and end time in the format yyyy-mm-dd, separated by /to.");
         }
 
-        this.taskManager.addTask(new EventTask(argsSplit[0], startEndTime[0], startEndTime[1]));
+        this.taskManager.addTask(new EventTask(argsSplit[0], startDate, endDate));
         return CommandHandler.Result.success(this.getTaskAddedMessage());
     }
 

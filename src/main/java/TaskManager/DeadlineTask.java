@@ -1,11 +1,14 @@
 package TaskManager;
 
-public class DeadlineTask extends Task {
-    private String deadline;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-    public DeadlineTask(String taskName, String deadline) {
+public class DeadlineTask extends Task {
+    private LocalDate deadlineDate;
+
+    public DeadlineTask(String taskName, LocalDate deadlineDate) {
         super(taskName);
-        this.deadline = deadline;
+        this.deadlineDate = deadlineDate;
     }
 
     @Override
@@ -15,6 +18,6 @@ public class DeadlineTask extends Task {
 
     @Override
     public String getAdditionalInfo() {
-        return String.format("by: %s", this.deadline);
+        return String.format("by: %s", this.deadlineDate.format(DateTimeFormatter.ofPattern("MMM d yyyy")));
     }
 }
