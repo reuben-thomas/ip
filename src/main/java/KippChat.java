@@ -1,4 +1,4 @@
-import Kipp.Kipp;
+import kipp.Kipp;
 
 import java.util.Scanner;
 

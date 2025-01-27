@@ -1,4 +1,4 @@
-package CommandHandler;
+package commandhandler;
 
 @FunctionalInterface
 public interface CommandFunction {

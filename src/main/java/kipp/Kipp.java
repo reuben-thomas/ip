@@ -1,13 +1,15 @@
-package Kipp;
+package kipp;
 
-import CommandHandler.Command;
-import CommandHandler.CommandHandler;
-import CommandHandler.CommandResult;
-import TaskList.DeadlineTask;
-import TaskList.EventTask;
-import TaskList.Task;
-import TaskList.TaskList;
-import TaskList.ToDoTask;
+import commandhandler.Command;
+import commandhandler.CommandHandler;
+import commandhandler.CommandResult;
+import storage.Storage;
+import storage.StorageException;
+import tasklist.DeadlineTask;
+import tasklist.EventTask;
+import tasklist.Task;
+import tasklist.TaskList;
+import tasklist.ToDoTask;
 
 import java.time.LocalDate;
 import java.util.Optional;

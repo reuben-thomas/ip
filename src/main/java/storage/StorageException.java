@@ -1,4 +1,4 @@
-package Kipp;
+package storage;
 
 import java.io.IOException;
 
