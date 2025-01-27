@@ -1,4 +1,4 @@
-package CommandHandler;
+package commandhandler;
 
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package CommandHandler;
+package commandhandler;
 
 public final class Command {
     private final String command;
