@@ -1,19 +1,15 @@
 package Kipp;
 
+import CommandHandler.Command;
+import CommandHandler.CommandHandler;
+import CommandHandler.CommandResult;
 import TaskList.DeadlineTask;
 import TaskList.EventTask;
 import TaskList.Task;
 import TaskList.TaskList;
 import TaskList.ToDoTask;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.time.LocalDate;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Optional;
 
 public class Kipp {
@@ -25,14 +21,14 @@ public class Kipp {
             ██   ██ ██ ██      ██
             """;
     private static final String NAME = "KIPP";
-    private static final String SAVE_FILE_NAME = "KIPP.txt";
-    private static final String UNRECOGNIZED_COMMAND_MESSAGE = "I don't recognize that command.";
-
-    private Map<String, CommandHandler> commandHandlerMap;
+    private static final String TASK_LIST_SAVE_FILE_PATH = "KIPP.txt";
+    private final Storage<TaskList> taskListStorage;
     private TaskList taskList;
+    private CommandHandler commandHandler;
 
     public Kipp() {
         this.taskList = new TaskList();
+        this.taskListStorage = new Storage<>(Kipp.TASK_LIST_SAVE_FILE_PATH, TaskList.class);
         this.initializeCommandHandlerMap();
     }
 
@@ -57,42 +53,58 @@ public class Kipp {
     }
 
     private void initializeCommandHandlerMap() {
-        this.commandHandlerMap = new LinkedHashMap<>();
-        this.commandHandlerMap.put("help", new CommandHandler("help", "",
-                this::helpCommandHandler));
-        this.commandHandlerMap.put("hello", new CommandHandler("hello", "",
-                args -> CommandHandler.Result.success(Kipp.getSelfIntroduction())));
-        this.commandHandlerMap.put("bye", new CommandHandler("bye", "",
-                args -> CommandHandler.Result.success(Kipp.getSignOut())));
-        this.commandHandlerMap.put("list", new CommandHandler("list", "",
+        this.commandHandler = new CommandHandler();
+        this.commandHandler.addCommand(new Command("hello",
+                "greeting from KIPP",
+                args -> CommandResult.success(Kipp.getSelfIntroduction())));
+        this.commandHandler.addCommand(new Command("bye",
+                "save task list and exit",
+                args -> CommandResult.success(Kipp.getSignOut())));
+        this.commandHandler.addCommand(new Command("list",
+                "list all tasks on your list.",
                 this::listCommandHandler));
-        this.commandHandlerMap.put("mark", new CommandHandler("mark", "<task number>",
+        this.commandHandler.addCommand(new Command(
+                "mark",
+                "<task number>",
+                "set task as completed",
                 this::setCompleteCommandHandler));
-        this.commandHandlerMap.put("unmark", new CommandHandler("unmark", "<task number>",
+        this.commandHandler.addCommand(new Command(
+                "unmark",
+                "<task number>",
+                "set task as incomplete",
                 this::setIncompleteCommandHandler));
-        this.commandHandlerMap.put("todo", new CommandHandler("todo", "<task description>",
+        this.commandHandler.addCommand(new Command(
+                "todo",
+                "<task description>",
+                "add a todo task to your list",
                 this::addTodoCommandHandler));
-        this.commandHandlerMap.put("deadline", new CommandHandler("deadline",
+        this.commandHandler.addCommand(new Command(
+                "deadline",
                 "<task description> /by <deadline yyyy-mm-dd>",
+                "add task with deadline to your list",
                 this::addDeadlineCommandHandler));
-        this.commandHandlerMap.put("event", new CommandHandler("event",
+        this.commandHandler.addCommand(new Command(
+                "event",
                 "<task description> /from <start yyyy-mm-dd> /to <end yyyy-mm-dd>",
+                "add task with deadline to your list",
                 this::addEventCommandHandler));
-        this.commandHandlerMap.put("delete", new CommandHandler("delete", "<task number>",
+        this.commandHandler.addCommand(new Command(
+                "delete",
+                "<task number>",
+                "delete task by task number",
                 this::deleteTaskCommandHandler));
-        this.commandHandlerMap.put("save", new CommandHandler("save", "",
+        this.commandHandler.addCommand(new Command(
+                "save",
+                "save current task list to disk",
                 this::saveCommandHandler));
-        this.commandHandlerMap.put("load", new CommandHandler("load", "",
+        this.commandHandler.addCommand(new Command(
+                "load",
+                "load previously saved task list from disk",
                 this::loadCommandHandler));
     }
 
-    public String getResponse(String inputCommand) {
-        CommandHandler commandHandler = this.commandHandlerMap.get(inputCommand.split(" ", 2)[0]);
-        if (commandHandler == null) {
-            return Kipp.UNRECOGNIZED_COMMAND_MESSAGE;
-        } else {
-            return commandHandler.getResponse(inputCommand);
-        }
+    public String getResponse(String input) {
+        return this.commandHandler.getResponse(input);
     }
 
     public String getResponse(String[] inputCommands) {
@@ -106,75 +118,54 @@ public class Kipp {
 
     // Approach to serializing and deserializing objects adapted from:
     // https://www.geeksforgeeks.org/serialization-in-java/
-    private CommandHandler.Result saveCommandHandler(String args) {
+    private CommandResult saveCommandHandler(String args) {
         try {
-            File file = new File(Kipp.SAVE_FILE_NAME);
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-
-            FileOutputStream fileOut = new FileOutputStream(Kipp.SAVE_FILE_NAME);
-            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            objectOut.writeObject(this.taskList);
-            objectOut.close();
-            fileOut.close();
-        } catch (Exception e) {
-            return CommandHandler.Result.error("Something went wrong, I couldn't save your todo list.");
+            this.taskListStorage.save(this.taskList);
+        } catch (StorageException e) {
+            return CommandResult.unexpectedError("Something went wrong, I couldn't save your task list to "
+                    + Kipp.TASK_LIST_SAVE_FILE_PATH + ". I'm leaving it as is.");
         }
-        return CommandHandler.Result.success("I've saved your todo list to "
-                + Kipp.SAVE_FILE_NAME + ".");
+        return CommandResult.success("I've saved your task list to "
+                + Kipp.TASK_LIST_SAVE_FILE_PATH + ".");
     }
 
     // Approach to serializing and deserializing objects adapted from:
     // https://www.geeksforgeeks.org/serialization-in-java/
-    private CommandHandler.Result loadCommandHandler(String args) {
-        File file = new File(Kipp.SAVE_FILE_NAME);
-        if (!file.exists()) {
-            return CommandHandler.Result.error("Sorry, it seems you don't have a saved todo list at "
-                    + Kipp.SAVE_FILE_NAME + ". I'm leaving it as is.");
-        }
-
+    private CommandResult loadCommandHandler(String args) {
         try {
-            FileInputStream fileIn = new FileInputStream(Kipp.SAVE_FILE_NAME);
-            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-            this.taskList = (TaskList) objectIn.readObject();
-            objectIn.close();
-            fileIn.close();
-        } catch (Exception e) {
-            return CommandHandler.Result.error("Something went wrong, I couldn't load your todo list. I'm leaving it as is.");
+            this.taskList = this.taskListStorage.load();
+        } catch (StorageException e) {
+            return CommandResult.unexpectedError("Something went wrong, I couldn't load your task list from "
+                    + Kipp.TASK_LIST_SAVE_FILE_PATH + ". I'm leaving it as is.");
         }
-        return CommandHandler.Result.success("I've loaded your todo list from "
-                + Kipp.SAVE_FILE_NAME + ".");
+        return CommandResult.success("I've loaded your task list from "
+                + Kipp.TASK_LIST_SAVE_FILE_PATH + ".");
     }
 
-    private CommandHandler.Result listCommandHandler(String args) {
+    private CommandResult listCommandHandler(String args) {
         return this.taskList.getLength() == 0
-                ? CommandHandler.Result.success("You have 0 tasks on your list.")
-                : CommandHandler.Result.success(this.taskList.toString());
+                ? CommandResult.success("You have 0 tasks on your list.")
+                : CommandResult.success(this.taskList.toString());
     }
 
-    private CommandHandler.Result setCompleteCommandHandler(String args) {
+    private CommandResult setCompleteCommandHandler(String args) {
         return this.setCompletionCommandHandlerHelper(args, true);
     }
 
-    private CommandHandler.Result setIncompleteCommandHandler(String args) {
+    private CommandResult setIncompleteCommandHandler(String args) {
         return this.setCompletionCommandHandlerHelper(args, false);
     }
 
-    private CommandHandler.Result setCompletionCommandHandlerHelper(String args, boolean isComplete) {
-        if (this.taskList.getLength() == 0) {
-            return CommandHandler.Result.error("You have no tasks to delete.");
-        }
-
+    private CommandResult setCompletionCommandHandlerHelper(String args, boolean isComplete) {
         Optional<Integer> taskIdxOpt;
         taskIdxOpt = this.validateTaskIndex(args);
         if (taskIdxOpt.isEmpty()) {
-            return CommandHandler.Result.error(getInvalidTaskIndexMessage());
+            return CommandResult.usageError(getInvalidTaskIndexMessage());
         }
         int taskIdx = taskIdxOpt.get();
 
         if (isComplete == this.taskList.getTask(taskIdx).isCompleted()) {
-            return CommandHandler.Result.error("Task was already marked "
+            return CommandResult.usageError("Task was already marked "
                     + (isComplete ? "completed." : "incomplete.")
                     + "I'm leaving it as is."
                     + "\n" + this.taskList.getTask(taskIdx).toString());
@@ -185,58 +176,54 @@ public class Kipp {
         } else {
             this.taskList.setTaskIncomplete(taskIdx);
         }
-        return CommandHandler.Result.success("Roger that. Marking task as "
+        return CommandResult.success("Roger that. Marking task as "
                 + (isComplete ? "completed." : "incomplete.")
                 + "\n" + this.taskList.getTask(taskIdx).toString());
     }
 
-    private CommandHandler.Result deleteTaskCommandHandler(String args) {
-        if (this.taskList.getLength() == 0) {
-            return CommandHandler.Result.error("You have no tasks to delete.");
-        }
-
+    private CommandResult deleteTaskCommandHandler(String args) {
         Optional<Integer> taskIdxOpt;
         taskIdxOpt = this.validateTaskIndex(args);
         if (taskIdxOpt.isEmpty()) {
-            return CommandHandler.Result.error(getInvalidTaskIndexMessage());
+            return CommandResult.usageError(getInvalidTaskIndexMessage());
         }
 
         Task deletedTask = this.taskList.deleteTask(taskIdxOpt.get());
-        return CommandHandler.Result.success("Roger that. I've deleted the following task from your list:\n"
+        return CommandResult.success("Roger that. I've deleted the following task from your list:\n"
                 + deletedTask.toString()
                 + "\nNote, you have " + this.taskList.getLength() + " tasks in your list.");
     }
 
-    private CommandHandler.Result addTodoCommandHandler(String args) {
+    private CommandResult addTodoCommandHandler(String args) {
         if (args.isBlank()) {
-            return CommandHandler.Result.error("Please provide a task description.");
+            return CommandResult.usageError("Please provide a task description.");
         }
 
         this.taskList.addTask(new ToDoTask(args));
-        return CommandHandler.Result.success(this.getTaskAddedMessage());
+        return CommandResult.success(this.getTaskAddedMessage());
     }
 
-    private CommandHandler.Result addDeadlineCommandHandler(String args) {
+    private CommandResult addDeadlineCommandHandler(String args) {
         String[] argsSplit = args.split(" /by ", 2);
         if (argsSplit.length < 2) {
-            return CommandHandler.Result.error("Please provide a task description and deadline.");
+            return CommandResult.usageError("Please provide a task description and deadline.");
         }
 
         LocalDate deadlineDate;
         try {
             deadlineDate = LocalDate.parse(argsSplit[1]);
         } catch (Exception e) {
-            return CommandHandler.Result.error("Please provide a valid deadline in the format yyyy-mm-dd.");
+            return CommandResult.usageError("Please provide a valid deadline in the format yyyy-mm-dd.");
         }
 
         this.taskList.addTask(new DeadlineTask(argsSplit[0], deadlineDate));
-        return CommandHandler.Result.success(this.getTaskAddedMessage());
+        return CommandResult.success(this.getTaskAddedMessage());
     }
 
-    private CommandHandler.Result addEventCommandHandler(String args) {
+    private CommandResult addEventCommandHandler(String args) {
         String[] argsSplit = args.split(" /from ", 2);
         if (argsSplit.length < 2) {
-            return CommandHandler.Result.error("Please provide a valid task description, start time and end time.");
+            return CommandResult.usageError("Please provide a valid task description, start time and end time.");
         }
 
         String[] startEndDate = argsSplit[1].split(" /to ", 2);
@@ -249,23 +236,11 @@ public class Kipp {
             startDate = LocalDate.parse(startEndDate[0]);
             endDate = LocalDate.parse(startEndDate[1]);
         } catch (Exception e) {
-            return CommandHandler.Result.error("Please provide a valid start and end time in the format yyyy-mm-dd, separated by /to.");
+            return CommandResult.usageError("Please provide a valid start and end time in the format yyyy-mm-dd, separated by /to.");
         }
 
         this.taskList.addTask(new EventTask(argsSplit[0], startDate, endDate));
-        return CommandHandler.Result.success(this.getTaskAddedMessage());
-    }
-
-    private CommandHandler.Result helpCommandHandler(String args) {
-        String[] commands = this.commandHandlerMap.keySet().toArray(new String[0]);
-
-        StringBuilder helpMessage = new StringBuilder("Hi there, here are some commands to get started:\n");
-        for (String command : commands) {
-            helpMessage.append(this.commandHandlerMap.get(command).getExampleUsage()).append("\n");
-        }
-        helpMessage.setLength(helpMessage.length() - 1);
-
-        return CommandHandler.Result.success(helpMessage.toString());
+        return CommandResult.success(this.getTaskAddedMessage());
     }
 
     private String getTaskAddedMessage() {

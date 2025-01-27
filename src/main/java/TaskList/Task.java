@@ -3,8 +3,8 @@ package TaskList;
 import java.io.Serializable;
 
 public abstract class Task implements Serializable {
-    private boolean isCompleted;
     private final String taskName;
+    private boolean isCompleted;
 
     public Task(String taskName) {
         this.isCompleted = false;
