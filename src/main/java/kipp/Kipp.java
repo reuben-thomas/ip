@@ -1,5 +1,8 @@
 package kipp;
 
+import java.time.LocalDate;
+import java.util.Optional;
+
 import commandhandler.Command;
 import commandhandler.CommandHandler;
 import commandhandler.CommandResult;
@@ -10,9 +13,6 @@ import tasklist.EventTask;
 import tasklist.Task;
 import tasklist.TaskList;
 import tasklist.ToDoTask;
-
-import java.time.LocalDate;
-import java.util.Optional;
 
 public class Kipp {
     private static final String LOGO = """
