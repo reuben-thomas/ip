@@ -1,8 +1,8 @@
 package kippchat;
 
-import kipp.Kipp;
-
 import java.util.Scanner;
+
+import kipp.Kipp;
 
 /**
  * Represents the chat interface for interacting with Kipp the robot.

@@ -1,9 +1,9 @@
 package storage;
 
-import tasklist.DeadlineTask;
-import tasklist.EventTask;
-import tasklist.TaskList;
-import tasklist.ToDoTask;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -11,10 +11,10 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import tasklist.DeadlineTask;
+import tasklist.EventTask;
+import tasklist.TaskList;
+import tasklist.ToDoTask;
 
 public class StorageTest {
     private static final String TEST_FILE_RELATIVE_PATH = "test_file.txt";
