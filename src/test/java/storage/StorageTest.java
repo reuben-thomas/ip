@@ -31,7 +31,9 @@ public class StorageTest {
     @AfterEach
     void deleteTestFile() {
         File file = new File(StorageTest.TEST_FILE_RELATIVE_PATH);
-        file.delete();
+        if (!file.delete()) {
+            fail("Test file could not be deleted.");
+        }
     }
 
     @Test

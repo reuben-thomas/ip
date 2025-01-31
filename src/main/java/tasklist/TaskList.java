@@ -9,7 +9,7 @@ public class TaskList implements Serializable {
     private final List<Task> taskList;
 
     public TaskList() {
-        this.taskList = new ArrayList<Task>();
+        this.taskList = new ArrayList<>();
     }
 
     public int getLength() {

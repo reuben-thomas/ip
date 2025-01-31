@@ -24,6 +24,8 @@ public class Kipp {
             """;
     private static final String NAME = "KIPP";
     private static final String TASK_LIST_SAVE_FILE_PATH = "KIPP.txt";
+    private static final String SIGN_OUT_MESSAGE = "Goodbye. Safe travels.";
+    private static final String INVALID_TASK_INDEX_MESSAGE = "Please provide a valid task number.";
     private final Storage<TaskList> taskListStorage;
     private TaskList taskList;
     private CommandHandler commandHandler;
@@ -47,11 +49,11 @@ public class Kipp {
     }
 
     public static String getSignOut() {
-        return "Goodbye. Safe travels.";
+        return Kipp.SIGN_OUT_MESSAGE;
     }
 
     private static String getInvalidTaskIndexMessage() {
-        return "Please provide a valid task number.";
+        return Kipp.INVALID_TASK_INDEX_MESSAGE;
     }
 
     private void initializeCommandHandlerMap() {
@@ -109,6 +111,12 @@ public class Kipp {
         return this.commandHandler.getResponse(input);
     }
 
+    /**
+     * Gets the response from the appropriate command handler function given an array of input commands.
+     *
+     * @param inputCommands The array of input commands.
+     * @return The response from the command after executing the handler function.
+     */
     public String getResponse(String[] inputCommands) {
         StringBuilder response = new StringBuilder();
         for (String inputCommand : inputCommands) {
@@ -118,8 +126,13 @@ public class Kipp {
         return response.toString();
     }
 
-    // Approach to serializing and deserializing objects adapted from:
-    // https://www.geeksforgeeks.org/serialization-in-java/
+    /**
+     * Handles the save command, to save the current task list to disk.
+     * Approach to serializing and deserializing objects adapted from: {@link <a href="https://www.geeksforgeeks.org/serialization-in-java/">GeeksforGeeks</a>}
+     *
+     * @param args The arguments passed to the save command, which will be ignored.
+     * @return The result of the save command.
+     */
     private CommandResult saveCommandHandler(String args) {
         try {
             this.taskListStorage.save(this.taskList);
@@ -131,8 +144,13 @@ public class Kipp {
                 + Kipp.TASK_LIST_SAVE_FILE_PATH + ".");
     }
 
-    // Approach to serializing and deserializing objects adapted from:
-    // https://www.geeksforgeeks.org/serialization-in-java/
+    /**
+     * Handles the load command, to load the task list from disk.
+     * Approach to serializing and deserializing objects adapted from: {@link <a href="https://www.geeksforgeeks.org/serialization-in-java/">GeeksforGeeks</a>}
+     *
+     * @param args The arguments passed to the load command, which will be ignored.
+     * @return The result of the load command.
+     */
     private CommandResult loadCommandHandler(String args) {
         try {
             this.taskList = this.taskListStorage.load();
