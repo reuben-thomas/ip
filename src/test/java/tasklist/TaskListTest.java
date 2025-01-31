@@ -36,6 +36,17 @@ public class TaskListTest {
     }
 
     @Test
+    public void testEquals() {
+        this.testAddTasks();
+
+        TaskList taskListNew = new TaskList();
+        taskListNew.addTask(this.task1);
+        taskListNew.addTask(this.task2);
+        taskListNew.addTask(this.task3);
+        assertEquals(this.taskList, taskListNew, "Task list should be equal to another task list with same tasks in same order.");
+    }
+
+    @Test
     public void testDeleteTasks() {
         this.testAddTasks();
 
