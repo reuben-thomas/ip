@@ -36,6 +36,9 @@ public abstract class Task implements Serializable {
     abstract char getTypeSymbol();
 
     @Override
+    public abstract boolean equals(Object obj);
+
+    @Override
     public final String toString() {
         String string = String.format("[%s][%s] %s", this.getTypeSymbol(), this.getCompletedSymbol(), this.getTaskName());
         if (!this.getAdditionalInfo().isEmpty()) {

@@ -25,4 +25,18 @@ public class EventTask extends Task {
                 this.endDate.format(DateTimeFormatter.ofPattern("MMM d yyyy"))
         );
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || this.getClass() != obj.getClass()) {
+            return false;
+        }
+        EventTask other = (EventTask) obj;
+        return this.getTaskName().equals(other.getTaskName())
+                && this.startDate.equals(other.startDate)
+                && this.endDate.equals(other.endDate);
+    }
 }
