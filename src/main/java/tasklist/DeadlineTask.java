@@ -20,4 +20,17 @@ public class DeadlineTask extends Task {
     public String getAdditionalInfo() {
         return String.format("by: %s", this.deadlineDate.format(DateTimeFormatter.ofPattern("MMM d yyyy")));
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || this.getClass() != obj.getClass()) {
+            return false;
+        }
+        DeadlineTask other = (DeadlineTask) obj;
+        return this.getTaskName().equals(other.getTaskName())
+                && this.deadlineDate.equals(other.deadlineDate);
+    }
 }

@@ -53,4 +53,24 @@ public class TaskList implements Serializable {
         str.setLength(str.length() - 1);
         return str.toString();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || this.getClass() != obj.getClass()) {
+            return false;
+        }
+        TaskList other = (TaskList) obj;
+        if (this.getLength() != other.getLength()) {
+            return false;
+        }
+        for (int i = 0; i < this.getLength(); i++) {
+            if (!this.getTask(i).equals(other.getTask(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
