@@ -35,70 +35,66 @@ Note, you have 1 tasks in your list.
 ---
 [KIPP]
 Please provide a task description and deadline.
-Example: deadline <task description> /by <deadline>
+Example: deadline <task description> /by <deadline yyyy-mm-dd>
 ---
 [cooper-testuser]
 ---
 [KIPP]
 Please provide a task description and deadline.
-Example: deadline <task description> /by <deadline>
+Example: deadline <task description> /by <deadline yyyy-mm-dd>
 ---
 [cooper-testuser]
 ---
 [KIPP]
 Please provide a task description and deadline.
-Example: deadline <task description> /by <deadline>
+Example: deadline <task description> /by <deadline yyyy-mm-dd>
 ---
 [cooper-testuser]
 ---
 [KIPP]
-Roger that, I've added the following task to your list:
-[D][ ] contact earth (by: 12 June 2027)
-Note, you have 2 tasks in your list.
----
-[cooper-testuser]
----
-[KIPP]
-Please provide a valid task description, start time and end time.
-Example: event <task description> /from <start time> /to <end time>
+Please provide a valid deadline in the format yyyy-mm-dd.
+Example: deadline <task description> /by <deadline yyyy-mm-dd>
 ---
 [cooper-testuser]
 ---
 [KIPP]
 Please provide a valid task description, start time and end time.
-Example: event <task description> /from <start time> /to <end time>
+Example: event <task description> /from <start yyyy-mm-dd> /to <end yyyy-mm-dd>
 ---
 [cooper-testuser]
 ---
 [KIPP]
 Please provide a valid task description, start time and end time.
-Example: event <task description> /from <start time> /to <end time>
+Example: event <task description> /from <start yyyy-mm-dd> /to <end yyyy-mm-dd>
 ---
 [cooper-testuser]
 ---
 [KIPP]
-Please provide a valid start and end time separated by /at.
-Example: event <task description> /from <start time> /to <end time>
+Please provide a valid task description, start time and end time.
+Example: event <task description> /from <start yyyy-mm-dd> /to <end yyyy-mm-dd>
 ---
 [cooper-testuser]
 ---
 [KIPP]
-Please provide a valid start and end time separated by /at.
-Example: event <task description> /from <start time> /to <end time>
+Please provide a valid start and end time in the format yyyy-mm-dd, separated by /to.
+Example: event <task description> /from <start yyyy-mm-dd> /to <end yyyy-mm-dd>
 ---
 [cooper-testuser]
 ---
 [KIPP]
-Roger that, I've added the following task to your list:
-[E][ ] passing black hole (from: tomorrow to: next week)
-Note, you have 3 tasks in your list.
+Please provide a valid start and end time in the format yyyy-mm-dd, separated by /to.
+Example: event <task description> /from <start yyyy-mm-dd> /to <end yyyy-mm-dd>
+---
+[cooper-testuser]
+---
+[KIPP]
+Please provide a valid start and end time in the format yyyy-mm-dd, separated by /to.
+Example: event <task description> /from <start yyyy-mm-dd> /to <end yyyy-mm-dd>
 ---
 [cooper-testuser]
 ---
 [KIPP]
 1. [T][ ] fix spaceship
-2. [D][ ] contact earth (by: 12 June 2027)
-3. [E][ ] passing black hole (from: tomorrow to: next week)
 ---
 [cooper-testuser]
 ---
@@ -116,66 +112,57 @@ Roger that. Marking task as incomplete.
 ---
 [KIPP]
 1. [T][ ] fix spaceship
-2. [D][ ] contact earth (by: 12 June 2027)
-3. [E][ ] passing black hole (from: tomorrow to: next week)
 ---
 [cooper-testuser]
 ---
 [KIPP]
-Roger that. Marking task as completed.
-[E][x] passing black hole (from: tomorrow to: next week)
----
-[cooper-testuser]
----
-[KIPP]
-Task was already marked completed.I'm leaving it as is.
-[E][x] passing black hole (from: tomorrow to: next week)
+Please provide a valid task number.
 Example: mark <task number>
 ---
 [cooper-testuser]
 ---
 [KIPP]
-Roger that. Marking task as incomplete.
-[E][ ] passing black hole (from: tomorrow to: next week)
+Please provide a valid task number.
+Example: mark <task number>
 ---
 [cooper-testuser]
 ---
 [KIPP]
-Task was already marked incomplete.I'm leaving it as is.
-[E][ ] passing black hole (from: tomorrow to: next week)
+Please provide a valid task number.
+Example: unmark <task number>
+---
+[cooper-testuser]
+---
+[KIPP]
+Please provide a valid task number.
 Example: unmark <task number>
 ---
 [cooper-testuser]
 ---
 [KIPP]
 1. [T][ ] fix spaceship
-2. [D][ ] contact earth (by: 12 June 2027)
-3. [E][ ] passing black hole (from: tomorrow to: next week)
 ---
 [cooper-testuser]
 ---
 [KIPP]
-I've saved your todo list to KIPP.txt.
+I've saved your task list to KIPP.txt.
 ---
 [cooper-testuser]
 ---
 [KIPP]
-Roger that. I've deleted the following task from your list:
-[E][ ] passing black hole (from: tomorrow to: next week)
-Note, you have 2 tasks in your list.
+Please provide a valid task number.
+Example: delete <task number>
 ---
 [cooper-testuser]
 ---
 [KIPP]
 1. [T][ ] fix spaceship
-2. [D][ ] contact earth (by: 12 June 2027)
 ---
 [cooper-testuser]
 ---
 [KIPP]
-Roger that. I've deleted the following task from your list:
-[D][ ] contact earth (by: 12 June 2027)
-Note, you have 1 tasks in your list.
+Please provide a valid task number.
+Example: delete <task number>
 ---
 [cooper-testuser]
 ---
@@ -192,20 +179,18 @@ Note, you have 0 tasks in your list.
 [cooper-testuser]
 ---
 [KIPP]
-You have no tasks to delete.
+Please provide a valid task number.
 Example: delete <task number>
 ---
 [cooper-testuser]
 ---
 [KIPP]
-I've loaded your todo list from KIPP.txt.
+I've loaded your task list from KIPP.txt.
 ---
 [cooper-testuser]
 ---
 [KIPP]
 1. [T][ ] fix spaceship
-2. [D][ ] contact earth (by: 12 June 2027)
-3. [E][ ] passing black hole (from: tomorrow to: next week)
 ---
 [cooper-testuser]
 ---

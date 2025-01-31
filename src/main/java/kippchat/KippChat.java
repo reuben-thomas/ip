@@ -1,3 +1,5 @@
+package kippchat;
+
 import kipp.Kipp;
 
 import java.util.Scanner;

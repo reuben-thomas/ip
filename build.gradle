@@ -29,7 +29,7 @@ test {
 }
 
 application {
-    mainClass.set("KippChat")
+    mainClass.set("kippchat.KippChat")
 }
 
 shadowJar {

@@ -10,19 +10,20 @@ if [ -e "./ACTUAL.TXT" ]; then
   rm ACTUAL.TXT
 fi
 
+# delete saved file from previous run
+if [ -e "./KIPP.txt" ]; then
+  rm KIPP.txt
+fi
+
 # compile the code into the bin folder, terminates if error occurred
-if ! javac -cp ../src/main/java -Xlint:none -d ../bin ../src/main/java/*.java; then
+if ! javac -cp ../src/main/java -Xlint:none -d ../bin ../src/main/java/kippchat/*.java; then
   echo "********** BUILD FAILURE **********"
   exit 1
 fi
 
 # set test username environment variable
 export KIPP_CHAT_TEST_USERNAME="cooper-testuser"
-# move any saved data
-mv ../KIPP.txt ../KIPP.txt.bak
-sleep 1
-# run test
-java -classpath ../bin KippChat <input.txt >ACTUAL.TXT
+java -classpath ../bin kippchat.KippChat <input.txt >ACTUAL.TXT
 unset KIPP_CHAT_TEST_USERNAME
 
 # convert to UNIX format
