@@ -1,23 +1,41 @@
 package commandhandler;
 
+/**
+ * Represents a command that can be executed by the user.
+ */
 public final class Command {
     private final String command;
     private final String exampleUsage;
     private final String description;
-    private final CommandFunction handlerFunction;
+    private final CommandFunction commandFunction;
 
-    public Command(String command, String description, CommandFunction handlerFunction) {
+    /**
+     * Constructor for Command class.
+     *
+     * @param command         The command that will uniquely identify this command.
+     * @param description     A brief description of what the command will do.
+     * @param commandFunction The function that will be called when the command is executed.
+     */
+    public Command(String command, String description, CommandFunction commandFunction) {
         this.command = command;
         this.exampleUsage = this.command;
         this.description = description;
-        this.handlerFunction = handlerFunction;
+        this.commandFunction = commandFunction;
     }
 
-    public Command(String command, String exampleArgs, String description, CommandFunction handlerFunction) {
+    /**
+     * Constructor for Command class.
+     *
+     * @param command         The command that will uniquely identify this command.
+     * @param exampleArgs     Example arguments that the command can take.
+     * @param description     A brief description of what the command will do.
+     * @param commandFunction The function that will be called when the command is executed.
+     */
+    public Command(String command, String exampleArgs, String description, CommandFunction commandFunction) {
         this.command = command;
         this.exampleUsage = this.command + " " + exampleArgs;
         this.description = description;
-        this.handlerFunction = handlerFunction;
+        this.commandFunction = commandFunction;
     }
 
     public String getCommand() {
@@ -32,8 +50,14 @@ public final class Command {
         return this.exampleUsage;
     }
 
+    /**
+     * Executes the command function with the given arguments.
+     *
+     * @param commandArgs The arguments to be passed to the command.
+     * @return The response from the command after executing the handler function.
+     */
     public String getResponse(String commandArgs) {
-        CommandResult result = this.handlerFunction.execute(commandArgs);
+        CommandResult result = this.commandFunction.execute(commandArgs);
 
         if (result.resultType() == CommandResult.ResultType.SUCCESS && result.response().isPresent()) {
             return result.response().get();

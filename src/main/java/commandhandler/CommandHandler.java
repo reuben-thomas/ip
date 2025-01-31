@@ -3,14 +3,25 @@ package commandhandler;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Handles a set of commands and assigns each command to a function that will be executed when the command is called.
+ */
 public class CommandHandler {
     private static final String UNRECOGNIZED_COMMAND_MESSAGE = "I don't recognize that command.";
     private final Map<String, Command> commandHandlerMap;
 
+    /**
+     * Constructor for CommandHandler class.
+     */
     public CommandHandler() {
         this(true);
     }
 
+    /**
+     * Constructor for CommandHandler class.
+     *
+     * @param addHelpCommand Whether to add a help command that lists all available commands, descriptions and sample usages.
+     */
     public CommandHandler(boolean addHelpCommand) {
         this.commandHandlerMap = new LinkedHashMap<>();
         if (addHelpCommand) {
@@ -18,6 +29,11 @@ public class CommandHandler {
         }
     }
 
+    /**
+     * Adds a command to the command handler.
+     *
+     * @param command The command to be added.
+     */
     public void addCommand(Command command) {
         this.commandHandlerMap.put(command.getCommand(), command);
     }
@@ -31,6 +47,12 @@ public class CommandHandler {
         return CommandResult.success(helpMessage.toString());
     }
 
+    /**
+     * Gets the response from the appropriate command handler function given an input.
+     *
+     * @param input The full input, including the command and arguments.
+     * @return The response from the command after executing the handler function.
+     */
     public String getResponse(String input) {
         String[] inputSplit = input.split(" ", 2);
         String commandName = inputSplit[0];

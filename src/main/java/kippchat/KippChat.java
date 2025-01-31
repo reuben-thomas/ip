@@ -4,11 +4,17 @@ import kipp.Kipp;
 
 import java.util.Scanner;
 
+/**
+ * Represents the chat interface for interacting with Kipp the robot.
+ */
 public class KippChat {
     private final Kipp kipp;
     private final String username;
     private final Scanner scanner;
 
+    /**
+     * Constructor for KippChat class.
+     */
     public KippChat() {
         // If test username provided in environment variable, use it.
         if (System.getenv("KIPP_CHAT_TEST_USERNAME") != null) {
@@ -35,6 +41,9 @@ public class KippChat {
         chat.run();
     }
 
+    /**
+     * Runs the chat interface.
+     */
     public void run() {
         System.out.println(Kipp.getLogo());
 
@@ -53,6 +62,11 @@ public class KippChat {
         this.kipp.getResponse("save");
     }
 
+    /**
+     * Displays messages to the user in CLI, neatly formatted with the appropriate name badge and separator.
+     *
+     * @param messages The messages to display.
+     */
     private void displayMessage(String[] messages) {
         KippChat.printNameBadge(Kipp.getName());
         for (String message : messages) {
@@ -61,6 +75,11 @@ public class KippChat {
         KippChat.printSeparator();
     }
 
+    /**
+     * Reads user input from CLI.
+     *
+     * @return The user input.
+     */
     private String readUserInput() {
         KippChat.printNameBadge(this.username);
         String userInput = this.scanner.nextLine();
