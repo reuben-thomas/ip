@@ -1,5 +1,10 @@
 package kipp;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import commandhandler.Command;
 import commandhandler.CommandHandler;
 import commandhandler.CommandResult;
@@ -10,9 +15,6 @@ import tasklist.EventTask;
 import tasklist.Task;
 import tasklist.TaskList;
 import tasklist.ToDoTask;
-
-import java.time.LocalDate;
-import java.util.Optional;
 
 public class Kipp {
     private static final String LOGO = """
@@ -103,6 +105,11 @@ public class Kipp {
                 "load",
                 "load previously saved task list from disk",
                 this::loadCommandHandler));
+        this.commandHandler.addCommand(new Command(
+                "find",
+                "<keyword>",
+                "find tasks containing keyword",
+                this::findTaskCommandHandler));
     }
 
     public String getResponse(String input) {
@@ -243,6 +250,28 @@ public class Kipp {
 
         this.taskList.addTask(new EventTask(argsSplit[0], startDate, endDate));
         return CommandResult.success(this.getTaskAddedMessage());
+    }
+
+    private CommandResult findTaskCommandHandler(String args) {
+        if (args.isBlank()) {
+            return CommandResult.usageError("Please provide a keyword to search for.");
+        }
+
+        List<Integer> resultTaskIdx = new ArrayList<>();
+        for (int i = 0; i < this.taskList.getLength(); i++) {
+            if (this.taskList.getTask(i).getTaskName().contains(args)) {
+                resultTaskIdx.add(i);
+            }
+        }
+        if (resultTaskIdx.isEmpty()) {
+            return CommandResult.success("No tasks found.");
+        } else {
+            TaskList resultTaskList = new TaskList();
+            for (int i : resultTaskIdx) {
+                resultTaskList.addTask(this.taskList.getTask(i));
+            }
+            return CommandResult.success("Roger, here are the tasks I've found:\n" + resultTaskList.toString());
+        }
     }
 
     private String getTaskAddedMessage() {
