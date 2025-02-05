@@ -1,5 +1,10 @@
 # KIPP
 
+> "Do not go gentle into that good night. Old age should burn and rave at close of ay. Rage, rage against the dying of
+> the light." - Dylan Thomas
+
+![KIPP Detonates](https://github.com/reuben-thomas/ip/blob/master/docs/images/kipp-detonates.png)
+
 KIPP is an AI Assistant, named after one of the robots from the movie Interstellar. In the movie, KIPP detonates itself
 when interacted with. This repository is based on the provided project template for a greenfield Java project. Given
 below are instructions on how to use it.
