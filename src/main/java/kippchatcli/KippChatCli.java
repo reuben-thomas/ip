@@ -1,4 +1,4 @@
-package kippchat;
+package kippchatcli;
 
 import java.util.Scanner;
 
@@ -7,22 +7,22 @@ import kipp.Kipp;
 /**
  * Represents the chat interface for interacting with Kipp the robot.
  */
-public class KippChat {
+public class KippChatCli {
     private final Kipp kipp;
     private final String username;
     private final Scanner scanner;
 
     /**
-     * Constructor for KippChat class.
+     * Constructor for KippChatCli class.
      */
-    public KippChat() {
+    public KippChatCli() {
         // If test username provided in environment variable, use it.
         if (System.getenv("KIPP_CHAT_TEST_USERNAME") != null) {
             this.username = System.getenv("KIPP_CHAT_TEST_USERNAME");
         } else if (System.getProperty("user.name") != null) {
             this.username = System.getProperty("user.name");
         } else {
-            this.username = "cooper";
+            this.username = "Dr. Mann";
         }
         this.scanner = new Scanner(System.in);
         this.kipp = new Kipp();
@@ -37,7 +37,7 @@ public class KippChat {
     }
 
     public static void main(String[] args) {
-        KippChat chat = new KippChat();
+        KippChatCli chat = new KippChatCli();
         chat.run();
     }
 
@@ -68,11 +68,11 @@ public class KippChat {
      * @param messages The messages to display.
      */
     private void displayMessage(String[] messages) {
-        KippChat.printNameBadge(Kipp.getName());
+        KippChatCli.printNameBadge(Kipp.getName());
         for (String message : messages) {
             System.out.println(message);
         }
-        KippChat.printSeparator();
+        KippChatCli.printSeparator();
     }
 
     /**
@@ -81,9 +81,9 @@ public class KippChat {
      * @return The user input.
      */
     private String readUserInput() {
-        KippChat.printNameBadge(this.username);
+        KippChatCli.printNameBadge(this.username);
         String userInput = this.scanner.nextLine();
-        KippChat.printSeparator();
+        KippChatCli.printSeparator();
         return userInput;
     }
 }
