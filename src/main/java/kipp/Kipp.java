@@ -16,6 +16,9 @@ import tasklist.Task;
 import tasklist.TaskList;
 import tasklist.ToDoTask;
 
+/**
+ * Represents the main class for KIPP, an assistant with task management capabilities.
+ */
 public class Kipp {
     private static final String LOGO = """
             ██   ██ ██ ██████  ██████
@@ -32,6 +35,9 @@ public class Kipp {
     private TaskList taskList;
     private CommandHandler commandHandler;
 
+    /**
+     * Constructor for Kipp class.
+     */
     public Kipp() {
         this.taskList = new TaskList();
         this.taskListStorage = new Storage<>(Kipp.TASK_LIST_SAVE_FILE_PATH, TaskList.class);
@@ -135,7 +141,8 @@ public class Kipp {
 
     /**
      * Handles the save command, to save the current task list to disk.
-     * Approach to serializing and deserializing objects adapted from: {@link <a href="https://www.geeksforgeeks.org/serialization-in-java/">GeeksforGeeks</a>}
+     * Approach to serializing and deserializing objects adapted from:
+     * <a href="https://www.geeksforgeeks.org/serialization-in-java/">GeeksforGeeks</a>
      *
      * @param args The arguments passed to the save command, which will be ignored.
      * @return The result of the save command.
@@ -153,7 +160,8 @@ public class Kipp {
 
     /**
      * Handles the load command, to load the task list from disk.
-     * Approach to serializing and deserializing objects adapted from: {@link <a href="https://www.geeksforgeeks.org/serialization-in-java/">GeeksforGeeks</a>}
+     * Approach to serializing and deserializing objects adapted from:
+     * <a href="https://www.geeksforgeeks.org/serialization-in-java/">GeeksforGeeks</a>
      *
      * @param args The arguments passed to the load command, which will be ignored.
      * @return The result of the load command.
@@ -263,7 +271,8 @@ public class Kipp {
             startDate = LocalDate.parse(startEndDate[0]);
             endDate = LocalDate.parse(startEndDate[1]);
         } catch (Exception e) {
-            return CommandResult.usageError("Please provide a valid start and end time in the format yyyy-mm-dd, separated by /to.");
+            return CommandResult.usageError(
+                    "Please provide a valid start and end time in the format yyyy-mm-dd, separated by /to.");
         }
 
         this.taskList.addTask(new EventTask(argsSplit[0], startDate, endDate));

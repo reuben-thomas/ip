@@ -74,13 +74,14 @@ public abstract class Task implements Serializable {
     public abstract boolean equals(Object obj);
 
     /**
-     * Returns a neatly formatted string representation of the task, including the task type, completion status, task name and additional information.
+     * Returns a formatted string of the task, including the type, completion, name and additional information
      *
      * @return A string representation of the task.
      */
     @Override
     public final String toString() {
-        String string = String.format("[%s][%s] %s", this.getTypeSymbol(), this.getCompletedSymbol(), this.getTaskName());
+        String string = String.format("[%s][%s] %s",
+                this.getTypeSymbol(), this.getCompletedSymbol(), this.getTaskName());
         if (!this.getAdditionalInfo().isEmpty()) {
             string += String.format(" (%s)", this.getAdditionalInfo());
         }
