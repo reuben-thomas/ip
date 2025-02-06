@@ -4,10 +4,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a list of tasks.
+ */
 public class TaskList implements Serializable {
 
     private final List<Task> taskList;
 
+    /**
+     * Constructor for TaskList class.
+     */
     public TaskList() {
         this.taskList = new ArrayList<>();
     }
@@ -16,10 +22,21 @@ public class TaskList implements Serializable {
         return this.taskList.size();
     }
 
+    /**
+     * Adds a task to the task list.
+     *
+     * @param task The task to be added.
+     */
     public void addTask(Task task) {
         this.taskList.add(task);
     }
 
+    /**
+     * Deletes a task from the task list.
+     *
+     * @param taskIdx The index of the task to be deleted.
+     * @return The deleted task.
+     */
     public Task deleteTask(int taskIdx) {
         Task deletedTask = this.taskList.get(taskIdx);
         this.taskList.remove(taskIdx);

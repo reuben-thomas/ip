@@ -20,7 +20,7 @@ public class CommandHandler {
     /**
      * Constructor for CommandHandler class.
      *
-     * @param addHelpCommand Whether to add a help command that lists all available commands, descriptions and sample usages.
+     * @param addHelpCommand Whether to automatically add a help command.
      */
     public CommandHandler(boolean addHelpCommand) {
         this.commandHandlerMap = new LinkedHashMap<>();
@@ -41,7 +41,10 @@ public class CommandHandler {
     private CommandResult helpCommandFunction(String commandArgs) {
         StringBuilder helpMessage = new StringBuilder("These are the available commands:\n");
         for (Map.Entry<String, Command> commandEntry : this.commandHandlerMap.entrySet()) {
-            helpMessage.append(String.format("- %s: %s [e.g. %s]\n", commandEntry.getKey(), commandEntry.getValue().getDescription(), commandEntry.getValue().getExampleUsage()));
+            helpMessage.append(String.format("- %s: %s [e.g. %s]\n",
+                    commandEntry.getKey(),
+                    commandEntry.getValue().getDescription(),
+                    commandEntry.getValue().getExampleUsage()));
         }
         helpMessage.setLength(helpMessage.length() - 1);
         return CommandResult.success(helpMessage.toString());

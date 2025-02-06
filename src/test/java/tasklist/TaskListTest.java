@@ -30,8 +30,10 @@ public class TaskListTest {
 
         for (int i = 0; i < tasks.length; i++) {
             this.taskList.addTask(tasks[i]);
-            assertEquals(i + 1, this.taskList.getLength(), "Length of task list should be updated after adding new task.");
-            assertEquals(this.taskList.getTask(this.taskList.getLength() - 1), tasks[i], "Task should be added as last task in list.");
+            assertEquals(i + 1, this.taskList.getLength(),
+                    "Length of task list should be updated after adding new task.");
+            assertEquals(this.taskList.getTask(this.taskList.getLength() - 1), tasks[i],
+                    "Task should be added as last task in list.");
         }
     }
 
@@ -43,7 +45,8 @@ public class TaskListTest {
         taskListNew.addTask(this.task1);
         taskListNew.addTask(this.task2);
         taskListNew.addTask(this.task3);
-        assertEquals(this.taskList, taskListNew, "Task list should be equal to another task list with same tasks in same order.");
+        assertEquals(this.taskList, taskListNew,
+                "Task list should be equal to another task list with same tasks in same order.");
     }
 
     @Test

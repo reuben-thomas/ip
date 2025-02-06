@@ -36,7 +36,8 @@ public class Storage<T extends Serializable> {
      */
     public void save(T item) throws StorageException {
         this.ensureFileExists();
-        try (FileOutputStream fileOut = new FileOutputStream(this.relativeFilePath); ObjectOutputStream objectOut = new ObjectOutputStream(fileOut)) {
+        try (FileOutputStream fileOut = new FileOutputStream(this.relativeFilePath);
+             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut)) {
             objectOut.writeObject(item);
         } catch (IOException e) {
             throw new StorageException(String.format("Error saving data to file: %s.", this.relativeFilePath));
@@ -51,7 +52,8 @@ public class Storage<T extends Serializable> {
      */
     public T load() throws StorageException {
         this.ensureFileExists();
-        try (FileInputStream fileIn = new FileInputStream(this.relativeFilePath); ObjectInputStream objectIn = new ObjectInputStream(fileIn)) {
+        try (FileInputStream fileIn = new FileInputStream(this.relativeFilePath);
+             ObjectInputStream objectIn = new ObjectInputStream(fileIn)) {
             Object object = objectIn.readObject();
             if (this.type.isInstance(object)) {
                 return this.type.cast(object);

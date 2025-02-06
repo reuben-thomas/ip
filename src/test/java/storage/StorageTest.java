@@ -59,7 +59,9 @@ public class StorageTest {
             taskListStorage.load();
             fail();
         } catch (StorageException e) {
-            assertEquals(String.format("Error loading data from file: %s.", StorageTest.TEST_FILE_RELATIVE_PATH), e.getMessage(), "Loading a file with an invalid type should throw an exception.");
+            assertEquals(String.format("Error loading data from file: %s.",
+                            StorageTest.TEST_FILE_RELATIVE_PATH), e.getMessage(),
+                    "Loading a file with an invalid type should throw an exception.");
         }
     }
 
@@ -71,7 +73,8 @@ public class StorageTest {
         assertDoesNotThrow(() -> taskListStorage.save(savedTaskList));
         assertDoesNotThrow(() -> {
             TaskList loadedTaskList = taskListStorage.load();
-            assertEquals(savedTaskList, loadedTaskList, "Task list loaded from file should be logically equivalent to task list saved to the same file.");
+            assertEquals(savedTaskList, loadedTaskList,
+                    "Task list loaded from file should be logically equivalent to task list saved to the same file.");
         });
     }
 }
