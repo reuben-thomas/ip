@@ -14,7 +14,7 @@ import kipp.Kipp;
  */
 public class Main extends Application {
 
-    private Kipp kipp = new Kipp();
+    private Kipp kipp = Kipp.createKipp();
 
     @Override
     public void start(Stage stage) {
