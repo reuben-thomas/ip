@@ -24,6 +24,9 @@ public class Storage<T extends Serializable> {
      * @param type             The type of the object to be stored in the file.
      */
     public Storage(String relativeFilePath, Class<T> type) {
+        assert relativeFilePath != null && !relativeFilePath.isEmpty()
+                : "Relative file path cannot be null, nor empty.";
+        assert type != null : "Type of storage object cannot be null and must be serializable.";
         this.relativeFilePath = relativeFilePath;
         this.type = type;
     }
@@ -35,6 +38,7 @@ public class Storage<T extends Serializable> {
      * @throws StorageException If there is an error saving the object to the file.
      */
     public void save(T item) throws StorageException {
+        assert item != null : "Item to be saved cannot be null.";
         this.ensureFileExists();
         try (FileOutputStream fileOut = new FileOutputStream(this.relativeFilePath);
              ObjectOutputStream objectOut = new ObjectOutputStream(fileOut)) {
