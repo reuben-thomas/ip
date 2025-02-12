@@ -1,5 +1,6 @@
 package kipp;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,6 @@ public class Kipp {
     private static final String TASK_LIST_SAVE_FILE_PATH = "KIPP.txt";
     private static final String SIGN_OUT_MESSAGE = "Goodbye. Safe travels.";
     private static final String INVALID_TASK_INDEX_MESSAGE = "Please provide a valid task number.";
-    private final Storage<TaskList> taskListStorage;
     private TaskList taskList;
     private CommandHandler commandHandler;
 
@@ -40,7 +40,6 @@ public class Kipp {
      */
     private Kipp() {
         this.taskList = new TaskList();
-        this.taskListStorage = new Storage<>(Kipp.TASK_LIST_SAVE_FILE_PATH, TaskList.class);
         this.initializeCommandHandlerMap();
     }
 
@@ -114,13 +113,15 @@ public class Kipp {
                 "<task number>",
                 "delete task by task number",
                 this::deleteTaskCommandHandler));
-        this.commandHandler.addCommand(Command.createCommandWithoutArgs(
-                "save",
-                "save current task list to disk",
+        this.commandHandler.addCommand(Command.createCommandWithArgs(
+                "saveto",
+                "<relative_file_path.txt>",
+                "save current task list to disk as a text file",
                 this::saveCommandHandler));
-        this.commandHandler.addCommand(Command.createCommandWithoutArgs(
-                "load",
-                "load previously saved task list from disk",
+        this.commandHandler.addCommand(Command.createCommandWithArgs(
+                "loadfrom",
+                "<relative_file_path.txt>",
+                "load previously saved task list from disk as a text file",
                 this::loadCommandHandler));
         this.commandHandler.addCommand(Command.createCommandWithArgs(
                 "find",
@@ -157,14 +158,30 @@ public class Kipp {
      * @return The result of the save command.
      */
     private CommandResult saveCommandHandler(String args) {
-        try {
-            this.taskListStorage.save(this.taskList);
-        } catch (StorageException e) {
-            return CommandResult.createUnexpectedErrorResult("Something went wrong, I couldn't save your task list to "
-                    + Kipp.TASK_LIST_SAVE_FILE_PATH + ". I'm leaving it as is.");
+        String filePath = args;
+
+        if (!filePath.endsWith(".txt")) {
+            return CommandResult.createUsageErrorResult("Please provide a valid file path to a text file"
+                    + " with the .txt extension.");
         }
+
+        File file = new File(filePath);
+        if (file.isAbsolute()) {
+            return CommandResult.createUsageErrorResult("Please provide a relative file path."
+                    + "Absolute file paths are not allowed.");
+        }
+
+        try {
+            Storage<TaskList> taskListStorage = new Storage<>(filePath, TaskList.class);
+            taskListStorage.save(this.taskList);
+        } catch (StorageException e) {
+            return CommandResult.createUnexpectedErrorResult(
+                    "Something went wrong, I couldn't save your task list to "
+                            + filePath + ". I'm leaving it as is.");
+        }
+
         return CommandResult.createSuccessResult("I've saved your task list to "
-                + Kipp.TASK_LIST_SAVE_FILE_PATH + ".");
+                + filePath + ".");
     }
 
     /**
@@ -176,15 +193,33 @@ public class Kipp {
      * @return The result of the load command.
      */
     private CommandResult loadCommandHandler(String args) {
+        String filePath = args;
+
+        File file = new File(filePath);
+        if (!file.exists() || file.isDirectory()) {
+            return CommandResult.createUsageErrorResult("The file " + filePath + " does not exist.");
+        }
+
+        if (file.isAbsolute()) {
+            return CommandResult.createUsageErrorResult("Please provide a relative file path."
+                    + "Absolute file paths are not allowed.");
+        }
+
+        if (!filePath.endsWith(".txt")) {
+            return CommandResult.createUsageErrorResult("Please provide a valid file path to a text file"
+                    + " with the .txt extension.");
+        }
+
         try {
-            this.taskList = this.taskListStorage.load();
+            Storage<TaskList> taskListStorage = new Storage<>(filePath, TaskList.class);
+            taskListStorage.save(this.taskList);
         } catch (StorageException e) {
             return CommandResult.createUnexpectedErrorResult(
                     "Something went wrong, I couldn't load your task list from "
-                            + Kipp.TASK_LIST_SAVE_FILE_PATH + ". I'm leaving it as is.");
+                            + filePath + ". I'm leaving it as is.");
         }
         return CommandResult.createSuccessResult("I've loaded your task list from "
-                + Kipp.TASK_LIST_SAVE_FILE_PATH + ".");
+                + filePath + ".");
     }
 
     private CommandResult listCommandHandler(String args) {
