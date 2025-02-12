@@ -33,11 +33,15 @@ public class CommandHandler {
     }
 
     /**
-     * Adds a command to the command handler.
+     * Adds a command to the command handler. The command must not already exist in the command handler.
      *
      * @param command The command to be added.
      */
     public void addCommand(Command command) {
+        assert this.commandHandlerMap.containsKey(command.getCommand())
+                : "Command identified by the same name already exists."
+                + "Please ensure all command names aee unique.";
+
         this.commandHandlerMap.put(command.getCommand(), command);
     }
 

@@ -6,6 +6,32 @@ import java.util.Optional;
  * Represents the result of a command function execution.
  */
 public record CommandResult(Optional<String> response, Optional<String> errorMessage, ResultType resultType) {
+
+    /**
+     * Constructs a new command result.
+     *
+     * @param response     The response to be returned.
+     * @param errorMessage The error message to be returned.
+     * @param resultType   The type of the result.
+     */
+    public CommandResult(Optional<String> response, Optional<String> errorMessage, ResultType resultType) {
+        if (resultType != ResultType.SUCCESS) {
+            assert errorMessage.isPresent() && !errorMessage.get().isBlank()
+                    : "Error message must be present and non-empty for non-successful command results.";
+            assert response.isEmpty()
+                    : "Error message must be present and non-empty for non-successful command results.";
+        }
+
+        assert errorMessage.isEmpty()
+                : "Successful command result must not have an error message.";
+        assert response.isPresent() && !response.get().isBlank()
+                : "Successful command result must have a non-empty response.";
+
+        this.response = response;
+        this.errorMessage = errorMessage;
+        this.resultType = resultType;
+    }
+
     /**
      * Creates a successful command with message response.
      *
