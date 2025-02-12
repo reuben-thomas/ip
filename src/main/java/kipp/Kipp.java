@@ -38,10 +38,19 @@ public class Kipp {
     /**
      * Constructor for Kipp class.
      */
-    public Kipp() {
+    private Kipp() {
         this.taskList = new TaskList();
         this.taskListStorage = new Storage<>(Kipp.TASK_LIST_SAVE_FILE_PATH, TaskList.class);
         this.initializeCommandHandlerMap();
+    }
+
+    /**
+     * Factory method to create a new Kipp instance.
+     *
+     * @return The new Kipp instance.
+     */
+    public static Kipp createKipp() {
+        return new Kipp();
     }
 
     public static String getName() {
@@ -65,55 +74,55 @@ public class Kipp {
     }
 
     private void initializeCommandHandlerMap() {
-        this.commandHandler = new CommandHandler();
-        this.commandHandler.addCommand(new Command("hello",
+        this.commandHandler = CommandHandler.createCommandHandler(true);
+        this.commandHandler.addCommand(Command.createCommandWithoutArgs("hello",
                 "greeting from KIPP",
-                args -> CommandResult.success(Kipp.getSelfIntroduction())));
-        this.commandHandler.addCommand(new Command("bye",
+                args -> CommandResult.createSuccessResult(Kipp.getSelfIntroduction())));
+        this.commandHandler.addCommand(Command.createCommandWithoutArgs("bye",
                 "save task list and exit",
-                args -> CommandResult.success(Kipp.getSignOut())));
-        this.commandHandler.addCommand(new Command("list",
+                args -> CommandResult.createSuccessResult(Kipp.getSignOut())));
+        this.commandHandler.addCommand(Command.createCommandWithoutArgs("list",
                 "list all tasks on your list.",
                 this::listCommandHandler));
-        this.commandHandler.addCommand(new Command(
+        this.commandHandler.addCommand(Command.createCommandWithArgs(
                 "mark",
                 "<task number>",
                 "set task as completed",
                 this::setCompleteCommandHandler));
-        this.commandHandler.addCommand(new Command(
+        this.commandHandler.addCommand(Command.createCommandWithArgs(
                 "unmark",
                 "<task number>",
                 "set task as incomplete",
                 this::setIncompleteCommandHandler));
-        this.commandHandler.addCommand(new Command(
+        this.commandHandler.addCommand(Command.createCommandWithArgs(
                 "todo",
                 "<task description>",
                 "add a todo task to your list",
                 this::addTodoCommandHandler));
-        this.commandHandler.addCommand(new Command(
+        this.commandHandler.addCommand(Command.createCommandWithArgs(
                 "deadline",
                 "<task description> /by <deadline yyyy-mm-dd>",
                 "add task with deadline to your list",
                 this::addDeadlineCommandHandler));
-        this.commandHandler.addCommand(new Command(
+        this.commandHandler.addCommand(Command.createCommandWithArgs(
                 "event",
                 "<task description> /from <start yyyy-mm-dd> /to <end yyyy-mm-dd>",
                 "add task with deadline to your list",
                 this::addEventCommandHandler));
-        this.commandHandler.addCommand(new Command(
+        this.commandHandler.addCommand(Command.createCommandWithArgs(
                 "delete",
                 "<task number>",
                 "delete task by task number",
                 this::deleteTaskCommandHandler));
-        this.commandHandler.addCommand(new Command(
+        this.commandHandler.addCommand(Command.createCommandWithoutArgs(
                 "save",
                 "save current task list to disk",
                 this::saveCommandHandler));
-        this.commandHandler.addCommand(new Command(
+        this.commandHandler.addCommand(Command.createCommandWithoutArgs(
                 "load",
                 "load previously saved task list from disk",
                 this::loadCommandHandler));
-        this.commandHandler.addCommand(new Command(
+        this.commandHandler.addCommand(Command.createCommandWithArgs(
                 "find",
                 "<keyword>",
                 "find tasks containing keyword",
@@ -151,10 +160,10 @@ public class Kipp {
         try {
             this.taskListStorage.save(this.taskList);
         } catch (StorageException e) {
-            return CommandResult.unexpectedError("Something went wrong, I couldn't save your task list to "
+            return CommandResult.createUnexpectedErrorResult("Something went wrong, I couldn't save your task list to "
                     + Kipp.TASK_LIST_SAVE_FILE_PATH + ". I'm leaving it as is.");
         }
-        return CommandResult.success("I've saved your task list to "
+        return CommandResult.createSuccessResult("I've saved your task list to "
                 + Kipp.TASK_LIST_SAVE_FILE_PATH + ".");
     }
 
@@ -170,17 +179,18 @@ public class Kipp {
         try {
             this.taskList = this.taskListStorage.load();
         } catch (StorageException e) {
-            return CommandResult.unexpectedError("Something went wrong, I couldn't load your task list from "
-                    + Kipp.TASK_LIST_SAVE_FILE_PATH + ". I'm leaving it as is.");
+            return CommandResult.createUnexpectedErrorResult(
+                    "Something went wrong, I couldn't load your task list from "
+                            + Kipp.TASK_LIST_SAVE_FILE_PATH + ". I'm leaving it as is.");
         }
-        return CommandResult.success("I've loaded your task list from "
+        return CommandResult.createSuccessResult("I've loaded your task list from "
                 + Kipp.TASK_LIST_SAVE_FILE_PATH + ".");
     }
 
     private CommandResult listCommandHandler(String args) {
         return this.taskList.getLength() == 0
-                ? CommandResult.success("You have 0 tasks on your list.")
-                : CommandResult.success(this.taskList.toString());
+                ? CommandResult.createSuccessResult("You have 0 tasks on your list.")
+                : CommandResult.createSuccessResult(this.taskList.toString());
     }
 
     private CommandResult setCompleteCommandHandler(String args) {
@@ -195,12 +205,12 @@ public class Kipp {
         Optional<Integer> taskIdxOpt;
         taskIdxOpt = this.validateTaskIndex(args);
         if (taskIdxOpt.isEmpty()) {
-            return CommandResult.usageError(getInvalidTaskIndexMessage());
+            return CommandResult.createUsageErrorResult(getInvalidTaskIndexMessage());
         }
         int taskIdx = taskIdxOpt.get();
 
         if (isComplete == this.taskList.getTask(taskIdx).isCompleted()) {
-            return CommandResult.usageError("Task was already marked "
+            return CommandResult.createUsageErrorResult("Task was already marked "
                     + (isComplete ? "completed." : "incomplete.")
                     + "I'm leaving it as is."
                     + "\n" + this.taskList.getTask(taskIdx).toString());
@@ -211,7 +221,7 @@ public class Kipp {
         } else {
             this.taskList.setTaskIncomplete(taskIdx);
         }
-        return CommandResult.success("Roger that. Marking task as "
+        return CommandResult.createSuccessResult("Roger that. Marking task as "
                 + (isComplete ? "completed." : "incomplete.")
                 + "\n" + this.taskList.getTask(taskIdx).toString());
     }
@@ -220,45 +230,46 @@ public class Kipp {
         Optional<Integer> taskIdxOpt;
         taskIdxOpt = this.validateTaskIndex(args);
         if (taskIdxOpt.isEmpty()) {
-            return CommandResult.usageError(getInvalidTaskIndexMessage());
+            return CommandResult.createUsageErrorResult(getInvalidTaskIndexMessage());
         }
 
         Task deletedTask = this.taskList.deleteTask(taskIdxOpt.get());
-        return CommandResult.success("Roger that. I've deleted the following task from your list:\n"
+        return CommandResult.createSuccessResult("Roger that. I've deleted the following task from your list:\n"
                 + deletedTask.toString()
                 + "\nNote, you have " + this.taskList.getLength() + " tasks in your list.");
     }
 
     private CommandResult addTodoCommandHandler(String args) {
         if (args.isBlank()) {
-            return CommandResult.usageError("Please provide a task description.");
+            return CommandResult.createUsageErrorResult("Please provide a task description.");
         }
 
         this.taskList.addTask(new ToDoTask(args));
-        return CommandResult.success(this.getTaskAddedMessage());
+        return CommandResult.createSuccessResult(this.getTaskAddedMessage());
     }
 
     private CommandResult addDeadlineCommandHandler(String args) {
         String[] argsSplit = args.split(" /by ", 2);
         if (argsSplit.length < 2) {
-            return CommandResult.usageError("Please provide a task description and deadline.");
+            return CommandResult.createUsageErrorResult("Please provide a task description and deadline.");
         }
 
         LocalDate deadlineDate;
         try {
             deadlineDate = LocalDate.parse(argsSplit[1]);
         } catch (Exception e) {
-            return CommandResult.usageError("Please provide a valid deadline in the format yyyy-mm-dd.");
+            return CommandResult.createUsageErrorResult("Please provide a valid deadline in the format yyyy-mm-dd.");
         }
 
         this.taskList.addTask(new DeadlineTask(argsSplit[0], deadlineDate));
-        return CommandResult.success(this.getTaskAddedMessage());
+        return CommandResult.createSuccessResult(this.getTaskAddedMessage());
     }
 
     private CommandResult addEventCommandHandler(String args) {
         String[] argsSplit = args.split(" /from ", 2);
         if (argsSplit.length < 2) {
-            return CommandResult.usageError("Please provide a valid task description, start time and end time.");
+            return CommandResult.createUsageErrorResult(
+                    "Please provide a valid task description, start time and end time.");
         }
 
         String[] startEndDate = argsSplit[1].split(" /to ", 2);
@@ -271,17 +282,17 @@ public class Kipp {
             startDate = LocalDate.parse(startEndDate[0]);
             endDate = LocalDate.parse(startEndDate[1]);
         } catch (Exception e) {
-            return CommandResult.usageError(
+            return CommandResult.createUsageErrorResult(
                     "Please provide a valid start and end time in the format yyyy-mm-dd, separated by /to.");
         }
 
         this.taskList.addTask(new EventTask(argsSplit[0], startDate, endDate));
-        return CommandResult.success(this.getTaskAddedMessage());
+        return CommandResult.createSuccessResult(this.getTaskAddedMessage());
     }
 
     private CommandResult findTaskCommandHandler(String args) {
         if (args.isBlank()) {
-            return CommandResult.usageError("Please provide a keyword to search for.");
+            return CommandResult.createUsageErrorResult("Please provide a keyword to search for.");
         }
 
         List<Integer> resultTaskIdx = new ArrayList<>();
@@ -291,13 +302,14 @@ public class Kipp {
             }
         }
         if (resultTaskIdx.isEmpty()) {
-            return CommandResult.success("No tasks found.");
+            return CommandResult.createSuccessResult("No tasks found.");
         } else {
             TaskList resultTaskList = new TaskList();
             for (int i : resultTaskIdx) {
                 resultTaskList.addTask(this.taskList.getTask(i));
             }
-            return CommandResult.success("Roger, here are the tasks I've found:\n" + resultTaskList.toString());
+            return CommandResult.createSuccessResult(
+                    "Roger, here are the tasks I've found:\n" + resultTaskList.toString());
         }
     }
 

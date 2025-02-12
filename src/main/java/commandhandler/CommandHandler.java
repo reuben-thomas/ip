@@ -12,21 +12,24 @@ public class CommandHandler {
 
     /**
      * Constructor for CommandHandler class.
-     */
-    public CommandHandler() {
-        this(true);
-    }
-
-    /**
-     * Constructor for CommandHandler class.
      *
      * @param addHelpCommand Whether to automatically add a help command.
      */
-    public CommandHandler(boolean addHelpCommand) {
+    private CommandHandler(boolean addHelpCommand) {
         this.commandHandlerMap = new LinkedHashMap<>();
         if (addHelpCommand) {
-            this.addCommand(new Command("help", "", this::helpCommandFunction));
+            this.addCommand(Command.createCommandWithoutArgs("help",
+                    "Displays the available commands and their descriptions.", this::helpCommandFunction));
         }
+    }
+
+    /**
+     * Factory method to create a new command handler.
+     *
+     * @return The new command handler.
+     */
+    public static CommandHandler createCommandHandler(boolean addHelpCommand) {
+        return new CommandHandler(addHelpCommand);
     }
 
     /**
@@ -42,12 +45,11 @@ public class CommandHandler {
         StringBuilder helpMessage = new StringBuilder("These are the available commands:\n");
         for (Map.Entry<String, Command> commandEntry : this.commandHandlerMap.entrySet()) {
             helpMessage.append(String.format("- %s: %s [e.g. %s]\n",
-                    commandEntry.getKey(),
-                    commandEntry.getValue().getDescription(),
+                    commandEntry.getKey(), commandEntry.getValue().getDescription(),
                     commandEntry.getValue().getExampleUsage()));
         }
         helpMessage.setLength(helpMessage.length() - 1);
-        return CommandResult.success(helpMessage.toString());
+        return CommandResult.createSuccessResult(helpMessage.toString());
     }
 
     /**
@@ -65,6 +67,7 @@ public class CommandHandler {
         if (command == null) {
             return CommandHandler.UNRECOGNIZED_COMMAND_MESSAGE;
         }
+
         return command.getResponse(commandArgs);
     }
 }
