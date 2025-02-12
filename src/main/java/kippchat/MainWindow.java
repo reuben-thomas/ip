@@ -55,10 +55,12 @@ public class MainWindow extends AnchorPane {
         );
         userInput.clear();
 
-        PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(3));
-        delay.setOnFinished(event -> {
-            Platform.exit();
-        });
-        delay.play();
+        if (input.equals("bye")) {
+            PauseTransition delay = new PauseTransition(javafx.util.Duration.seconds(3));
+            delay.setOnFinished(event -> {
+                Platform.exit();
+            });
+            delay.play();
+        }
     }
 }
