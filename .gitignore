@@ -8,6 +8,7 @@
 /build/
 src/main/resources/docs/
 /.settings/
+.classpath
 
 # Data save files
 KIPP.txt
