@@ -19,13 +19,13 @@ public record CommandResult(Optional<String> response, Optional<String> errorMes
             assert errorMessage.isPresent() && !errorMessage.get().isBlank()
                     : "Error message must be present and non-empty for non-successful command results.";
             assert response.isEmpty()
-                    : "Error message must be present and non-empty for non-successful command results.";
+                    : "Response must be non-empty for non-successful command results.";
+        } else {
+            assert errorMessage.isEmpty()
+                    : "Successful command result must not have an error message.";
+            assert response.isPresent() && !response.get().isBlank()
+                    : "Successful command result must have a non-empty response.";
         }
-
-        assert errorMessage.isEmpty()
-                : "Successful command result must not have an error message.";
-        assert response.isPresent() && !response.get().isBlank()
-                : "Successful command result must have a non-empty response.";
 
         this.response = response;
         this.errorMessage = errorMessage;
@@ -93,8 +93,6 @@ public record CommandResult(Optional<String> response, Optional<String> errorMes
      * Represents the possible types of result of a command function execution.
      */
     public enum ResultType {
-        SUCCESS,
-        INVALID_USAGE_ERROR,
-        UNEXPECTED_ERROR
+        SUCCESS, INVALID_USAGE_ERROR, UNEXPECTED_ERROR
     }
 }

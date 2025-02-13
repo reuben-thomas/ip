@@ -7,7 +7,13 @@ import java.util.Map;
  * Handles a set of commands and assigns each command to a function that will be executed when the command is called.
  */
 public class CommandHandler {
+    /**
+     * The message to be displayed in response to an unrecognized command.
+     */
     private static final String UNRECOGNIZED_COMMAND_MESSAGE = "I don't recognize that command.";
+    /**
+     * The map of command names to their respective command objects.
+     */
     private final Map<String, Command> commandHandlerMap;
 
     /**
@@ -17,9 +23,9 @@ public class CommandHandler {
      */
     private CommandHandler(boolean addHelpCommand) {
         this.commandHandlerMap = new LinkedHashMap<>();
+
         if (addHelpCommand) {
-            this.addCommand(Command.createCommandWithoutArgs("help",
-                    "Displays the available commands and their descriptions.", this::helpCommandFunction));
+            this.addHelpCommandHandler();
         }
     }
 
@@ -45,13 +51,32 @@ public class CommandHandler {
         this.commandHandlerMap.put(command.getCommand(), command);
     }
 
+    /**
+     * Adds a help command to the command handler.
+     */
+    private void addHelpCommandHandler() {
+        this.addCommand(Command.createCommandWithoutArgs(
+                "help",
+                "Displays the available commands and their descriptions.",
+                this::helpCommandFunction));
+    }
+
+    /**
+     * Function to automatically generate a help message based on commands, descriptions and example usage.
+     *
+     * @param commandArgs The arguments passed to the help command.
+     * @return help message result
+     */
     private CommandResult helpCommandFunction(String commandArgs) {
         StringBuilder helpMessage = new StringBuilder("These are the available commands:\n");
+
         for (Map.Entry<String, Command> commandEntry : this.commandHandlerMap.entrySet()) {
             helpMessage.append(String.format("- %s: %s [e.g. %s]\n",
-                    commandEntry.getKey(), commandEntry.getValue().getDescription(),
+                    commandEntry.getKey(),
+                    commandEntry.getValue().getDescription(),
                     commandEntry.getValue().getExampleUsage()));
         }
+
         helpMessage.setLength(helpMessage.length() - 1);
         return CommandResult.createSuccessResult(helpMessage.toString());
     }
