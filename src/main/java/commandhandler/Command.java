@@ -17,14 +17,12 @@ public final class Command {
      */
     private final String description;
     /**
-     * The function that will be called to generate a response when the command is
-     * requested.
+     * The function that will be called to generate a response when the command is requested.
      */
     private final CommandFunction commandFunction;
 
     /**
-     * Constructor for Command class, used to create a new command without
-     * arguments.
+     * Constructor to create a new command without arguments.
      *
      * @param command         The command that will uniquely identify this command.
      * @param description     A brief description of what the command will do.
@@ -39,7 +37,7 @@ public final class Command {
     }
 
     /**
-     * Constructor for Command class, used to create a new command with arguments.
+     * Constructor to create a new command with arguments.
      *
      * @param command         The command that will uniquely identify this command.
      * @param exampleArgs     Example arguments that the command can take.
@@ -55,7 +53,7 @@ public final class Command {
     }
 
     /**
-     * Factory method to create a new command without arguments.
+     * Returns a newly created command object without arguments.
      *
      * @param command         The command that will uniquely identify this command.
      * @param description     A brief description of what the command will do.
@@ -69,7 +67,7 @@ public final class Command {
     }
 
     /**
-     * Factory method to create a new command with arguments.
+     * Returns a newly created command object with arguments.
      *
      * @param command         The command that will uniquely identify this command.
      * @param exampleArgs     Example arguments that the command can take.
@@ -84,7 +82,7 @@ public final class Command {
     }
 
     /**
-     * Gets the command string used to identify the command.
+     * Returns the command string used to identify the command.
      *
      * @return The command string.
      */
@@ -93,7 +91,7 @@ public final class Command {
     }
 
     /**
-     * Gets the description of what the command should do.
+     * Returns the description of what the command will do.
      *
      * @return The description of the command.
      */
@@ -102,8 +100,7 @@ public final class Command {
     }
 
     /**
-     * Gets the example usage of the command including the command and example
-     * arguments.
+     * Returns a full example usage of the command, including the command and example arguments.
      *
      * @return The example usage of the command.
      */
@@ -112,9 +109,9 @@ public final class Command {
     }
 
     /**
-     * Executes the command function with the given arguments.
+     * Returns the response from executing the command function with the given arguments.
      *
-     * @param commandArgs The arguments to be passed to the command.
+     * @param commandArgs The arguments to be passed to the commands.
      * @return The response from the command after executing the handler function.
      */
     public String getResponse(String commandArgs) {
@@ -127,6 +124,10 @@ public final class Command {
         if (result.isUsageError()) {
             return result.errorMessage().orElseGet(() -> "Invalid usage") + "\nExample: " + this.exampleUsage;
         }
+
+        assert result.isSuccess()
+                && result.response().isPresent()
+                && !result.response().get().isEmpty() : "If successful, response should be present and non-empty";
 
         return result.response().get();
     }

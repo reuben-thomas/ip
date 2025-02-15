@@ -70,7 +70,7 @@ public class Storage<T extends Serializable> {
     }
 
     /**
-     * Ensures that the file exists, creating it if it does not exist.
+     * Checks that the file exists, creating it if it does not exist.
      *
      * @throws StorageException If there is an error creating the file.
      */

@@ -32,7 +32,7 @@ public class TaskList implements Serializable {
     }
 
     /**
-     * Deletes a task from the task list.
+     * Deletes a tasks from the task list.
      *
      * @param taskIdx The index of the task to be deleted.
      * @return The deleted task.
@@ -55,6 +55,9 @@ public class TaskList implements Serializable {
         this.taskList.get(taskIdx).setIncomplete();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         if (this.taskList.isEmpty()) {
@@ -71,6 +74,12 @@ public class TaskList implements Serializable {
         return str.toString();
     }
 
+    /**
+     * Checks if the task list is equal to another object.
+     *
+     * @param obj The object to compare with.
+     * @return True if all tasks are the same, false otherwise.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

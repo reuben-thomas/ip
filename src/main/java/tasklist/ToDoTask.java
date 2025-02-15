@@ -23,7 +23,9 @@ public class ToDoTask extends Task {
     }
 
     /**
-     * {@inheritDoc}
+     * Returns additional information about the to-do task, which is an empty string.
+     *
+     * @return An empty string.
      */
     @Override
     public String getAdditionalInfo() {

@@ -14,7 +14,7 @@ public record CommandResult(Optional<String> response, Optional<String> errorMes
      * @param errorMessage The error message to be returned.
      * @param resultType   The type of the result.
      */
-    public CommandResult(Optional<String> response, Optional<String> errorMessage, ResultType resultType) {
+    public CommandResult {
         if (resultType != ResultType.SUCCESS) {
             assert errorMessage.isPresent() && !errorMessage.get().isBlank()
                     : "Error message must be present and non-empty for non-successful command results.";
@@ -27,15 +27,12 @@ public record CommandResult(Optional<String> response, Optional<String> errorMes
                     : "Successful command result must have a non-empty response.";
         }
 
-        this.response = response;
-        this.errorMessage = errorMessage;
-        this.resultType = resultType;
     }
 
     /**
-     * Creates a successful command with message response.
+     * Returns a newly created successful command result with the given response.
      *
-     * @param response The response to be returned.
+     * @param response The successful response message.
      * @return The successful command result.
      */
     public static CommandResult createSuccessResult(String response) {
@@ -43,9 +40,9 @@ public record CommandResult(Optional<String> response, Optional<String> errorMes
     }
 
     /**
-     * Creates a command result indicating an invalid usage of the command, such as incorrect arguments.
+     * Returns a new command result associated with invalid usage error.
      *
-     * @param errorMessage The error response detailing the invalid usage.
+     * @param errorMessage The error message explaining the invalid usage.
      * @return The invalid usage command result.
      */
     public static CommandResult createUsageErrorResult(String errorMessage) {
@@ -53,7 +50,7 @@ public record CommandResult(Optional<String> response, Optional<String> errorMes
     }
 
     /**
-     * Creates a command result indicating an unexpected error occurred during command execution.
+     * Returns a new command result associated with an unexpected error during execution.
      *
      * @param errorMessage The error response explaining the unexpected error.
      * @return The unexpected error command result.

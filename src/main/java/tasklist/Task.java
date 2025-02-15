@@ -28,21 +28,21 @@ public abstract class Task implements Serializable {
     }
 
     /**
-     * Mark task as complete.
+     * Sets the task as complete.
      */
     public void setComplete() {
         this.isCompleted = true;
     }
 
     /**
-     * Mark task as incomplete.
+     * Sets the task as incomplete.
      */
     public void setIncomplete() {
         this.isCompleted = false;
     }
 
     /**
-     * Get a symbol representing the task's current completion.
+     * Returns a string symbol representing the task's current completion.
      *
      * @return A string symbol representing the task's current completion.
      */
@@ -51,16 +51,14 @@ public abstract class Task implements Serializable {
     }
 
     /**
-     * Get additional information about the task.
+     * Returns additional information about the task, such as associated date, or descriptions.
      *
      * @return A string containing additional information about the task.
      */
     abstract String getAdditionalInfo();
 
     /**
-     * Get a symbol representing the task type.
-     *
-     * @return A character representing the task type.
+     * {@inheritDoc}
      */
     abstract char getTypeSymbol();
 
