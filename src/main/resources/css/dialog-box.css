@@ -1,0 +1,11 @@
+.label {
+  -fx-border-color: #d55e00;
+  -fx-border-width: 2px;
+  -fx-font: 11px "JetBrains Mono";
+  -fx-text-fill: #ffffff;
+}
+
+.reply-label {
+  -fx-font: 11px "JetBrains Mono";
+  -fx-text-fill: #ffffff;
+}

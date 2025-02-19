@@ -1,0 +1,48 @@
+.root {
+  main-color: rgb(15, 15, 35);
+  -fx-background-color: main-color;
+}
+
+.text-field {
+  -fx-background-color: #ffffff;
+  -fx-font: bold 11px "JetBrains Mono";
+}
+
+.button {
+  -fx-background-color: #18de6b;
+  -fx-font: bold 11px "JetBrains Mono";
+  -fx-text-fill: #ffffff;
+}
+
+.button:hover {
+  -fx-background-color: #1d9951;
+  -fx-font-size: bold 11px;
+  -fx-text-fill: #ffffff;
+}
+
+.button:pressed {
+  -fx-background-color: #ff580a;
+  -fx-font-size: bold 11px;
+  -fx-text-fill: #ffffff;
+}
+
+.scroll-pane,
+.scroll-pane .viewport {
+  -fx-background-color: transparent;
+}
+
+.scroll-bar {
+  -fx-font-size: 11px;
+  -fx-background-color: main-color;
+}
+
+.scroll-bar .thumb {
+  -fx-background-color: #363f47;
+  -fx-background-radius: 1em;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+  -fx-pref-height: 0;
+  -fx-opacity: 0;
+}
