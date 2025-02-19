@@ -7,24 +7,28 @@
 
 .text-field {
   -fx-background-color: #ffffff;
-  -fx-font: bold 11px "JetBrains Mono";
+  -fx-font: bold "JetBrains Mono";
+  -fx-font-size: 11px;
 }
 
 .button {
   -fx-background-color: #18de6b;
-  -fx-font: bold 11px "JetBrains Mono";
+  -fx-font: bold "JetBrains Mono";
+  -fx-font-size: 11px;
   -fx-text-fill: #ffffff;
 }
 
 .button:hover {
   -fx-background-color: #1d9951;
-  -fx-font-size: bold 11px;
+  -fx-font: bold "JetBrains Mono";
+  -fx-font-size: 11px;
   -fx-text-fill: #ffffff;
 }
 
 .button:pressed {
   -fx-background-color: #ff580a;
-  -fx-font-size: bold 11px;
+  -fx-font: bold "JetBrains Mono";
+  -fx-font-size: 11px;
   -fx-text-fill: #ffffff;
 }
 
