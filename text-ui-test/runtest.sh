@@ -16,15 +16,15 @@ if [ -e "./KIPP.txt" ]; then
 fi
 
 # compile the code into the bin folder, terminates if error occurred
-if ! javac -cp ../src/main/java -Xlint:none -d ../bin ../src/main/java/kippchat/*.java; then
+if ! javac -cp ../src/main/java -Xlint:none -d ../bin ../src/main/java/kippchatcli/KippChatCli.java; then
   echo "********** BUILD FAILURE **********"
   exit 1
 fi
 
 # set test username environment variable
 export KIPP_CHAT_TEST_USERNAME="cooper-testuser"
-java -classpath ../bin kippchat.KippChat <input.txt >ACTUAL.TXT
-unset KIPP_CHAT_TEST_USERNAME
+java -classpath ../bin kippchatcli.KippChatCli <input.txt >ACTUAL.TXT
+# unset KIPP_CHAT_TEST_USERNAME
 
 # convert to UNIX format
 cp EXPECTED.TXT EXPECTED-UNIX.TXT
