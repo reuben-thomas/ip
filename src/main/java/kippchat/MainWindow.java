@@ -37,7 +37,7 @@ public class MainWindow extends AnchorPane {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
 
         dialogContainer.getChildren().addAll(
-                DialogBox.getKippDialog(Kipp.getSelfIntroduction(), kippImage)
+                DialogBox.getKippDialog("Hi there!", kippImage)
         );
     }
 

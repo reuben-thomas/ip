@@ -14,7 +14,19 @@ import kipp.Kipp;
  */
 public class Main extends Application {
 
-    private Kipp kipp = Kipp.createKipp();
+    private Kipp kipp;
+
+    /**
+     * Constructor for Main class.
+     */
+    public Main() {
+        String systemUserName = System.getProperty("user.name");
+        if (systemUserName != null && !systemUserName.isBlank()) {
+            this.kipp = Kipp.createKipp(systemUserName);
+        } else {
+            this.kipp = Kipp.createKipp();
+        }
+    }
 
     @Override
     public void start(Stage stage) {

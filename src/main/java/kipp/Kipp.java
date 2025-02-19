@@ -20,6 +20,9 @@ import tasklist.ToDoTask;
  * Represents the main class for KIPP, an assistant with task management capabilities.
  */
 public class Kipp {
+    /**
+     * ASCII art representation of the KIPP logo.
+     */
     private static final String LOGO = """
             ██   ██ ██ ██████  ██████
             ██  ██  ██ ██   ██ ██   ██
@@ -27,17 +30,49 @@ public class Kipp {
             ██  ██  ██ ██      ██
             ██   ██ ██ ██      ██
             """;
+    /**
+     * The name that KIPP goes by.
+     */
     private static final String NAME = "KIPP";
-    private static final String SIGN_OUT_MESSAGE = "Goodbye. Safe travels.";
+    /**
+     * A default name for the user KIPP will use, if non is provided.
+     */
+    private static final String DEFAULT_USER_NAME = "Dr. Mann";
+    /**
+     * The name of the user interacting with KIPP.
+     */
+    private String userName;
+    /**
+     * The list of tasks that KIPP manages and manipulates.
+     */
     private TaskList taskList;
+    /**
+     * Command handler used to store functions that respond to each function, and to process user input accordingly
+     * to generate a response.
+     */
     private CommandHandler commandHandler;
 
     /**
      * Constructor for Kipp class.
+     *
+     * @param userName The name of the user interacting with KIPP.
      */
-    private Kipp() {
+    private Kipp(String userName) {
+        if (System.getenv("KIPP_CHAT_TEST_USERNAME") != null) {
+            this.userName = System.getenv("KIPP_CHAT_TEST_USERNAME");
+        } else {
+            this.userName = userName;
+        }
+
         this.taskList = new TaskList();
         this.initializeCommandHandlerMap();
+    }
+
+    /**
+     * Constructor for Kipp class, with a default username.
+     */
+    private Kipp() {
+        this(DEFAULT_USER_NAME);
     }
 
     /**
@@ -49,32 +84,75 @@ public class Kipp {
         return new Kipp();
     }
 
+    /**
+     * Factory method to create a new Kipp instance, with a specified username to be interacting with.
+     *
+     * @param userName The name of the user interacting with KIPP.
+     * @return The new Kipp instance.
+     */
+    public static Kipp createKipp(String userName) {
+        assert !userName.isBlank() : "Username cannot be empty.";
+        return new Kipp(userName);
+    }
+
     public static String getName() {
         return Kipp.NAME;
     }
 
+    /**
+     * Gets the ASCII art representation of the KIPP.
+     *
+     * @return ASCII art of KIPP.
+     */
     public static String getLogo() {
         return Kipp.LOGO;
     }
 
-    public static String getSelfIntroduction() {
-        return "Hi there, this is " + Kipp.NAME + ".\nHow can I help?";
+    /**
+     * Gets the username of the user interacting with KIPP.
+     *
+     * @return The username of the user.
+     */
+    public String getUserName() {
+        return this.userName;
     }
 
-    public static String getSignOut() {
-        return Kipp.SIGN_OUT_MESSAGE;
+    /**
+     * Returns the message to be displayed when a user closes the application.
+     *
+     * @return The sign-out message.
+     */
+    private String getSignOut() {
+        return String.format(
+                "Goodbye %s and venture safely. I'll be here if you need me.",
+                this.userName);
     }
 
+    /**
+     * Returns the message of KIPP introducing themselves to the user.
+     *
+     * @return The self-introduction message.
+     */
+    private String getSelfIntroduction() {
+        return String.format(
+                "Well, hello there %s. This is %s speaking.\nHow can I help?",
+                this.userName, Kipp.NAME);
+    }
+
+    /**
+     * Initializes a new command handler map, and adds all commands, their corresponding handlers functions,
+     * and their descriptions.
+     */
     private void initializeCommandHandlerMap() {
         this.commandHandler = CommandHandler.createCommandHandler(true);
         this.commandHandler.addCommand(Command.createCommandWithoutArgs(
                 "hello",
                 "greeting from KIPP",
-                args -> CommandResult.createSuccessResult(Kipp.getSelfIntroduction())));
+                args -> CommandResult.createSuccessResult(this.getSelfIntroduction())));
         this.commandHandler.addCommand(Command.createCommandWithoutArgs(
                 "bye",
                 "save task list and exit",
-                args -> CommandResult.createSuccessResult(Kipp.getSignOut())));
+                args -> CommandResult.createSuccessResult(this.getSignOut())));
         this.commandHandler.addCommand(Command.createCommandWithoutArgs(
                 "list",
                 "list all tasks on your list.",
@@ -137,78 +215,86 @@ public class Kipp {
     }
 
     /**
-     * Checks if the filepath is absolute, is valid, and is a text file.
-     *
-     * @param filePath The file path to be checked.
-     * @return An optional error message if the file path is invalid.
-     */
-    private static Optional<String> getErrorIfInvalidFilePath(String filePath) {
-        if (!filePath.endsWith(".txt")) {
-            return Optional.of("Please provide a valid file path to a text file" + " with the .txt extension.");
-        }
-
-        File file = new File(filePath);
-        if (file.isAbsolute()) {
-            return Optional.of("Please provide a relative file path." + "Absolute file paths are not allowed.");
-        }
-
-        return Optional.empty();
-    }
-
-    /**
      * Handles the save command, to save the current task list to disk.
-     * Approach to serializing and deserializing objects adapted from:
-     * <a href="https://www.geeksforgeeks.org/serialization-in-java/">GeeksforGeeks</a>
      *
      * @param filePath The arguments passed to the save command, which will be ignored.
      * @return The result of the save command.
      */
     private CommandResult saveCommandHandler(String filePath) {
-        Optional<String> filePathError = Kipp.getErrorIfInvalidFilePath(filePath);
-        if (filePathError.isPresent()) {
-            return CommandResult.createUsageErrorResult(filePathError.get());
-        }
-
-        try {
-            Storage<TaskList> taskListStorage = new Storage<>(filePath, TaskList.class);
-            taskListStorage.save(this.taskList);
-        } catch (StorageException e) {
-            return CommandResult.createUnexpectedErrorResult(
-                    "Something went wrong, I couldn't save your task list to "
-                            + filePath + ". I'm leaving it as is.");
-        }
-
-        return CommandResult.createSuccessResult("I've saved your task list to " + filePath + ".");
+        return this.loadSaveCommandHanlderHelper(filePath, false);
     }
 
     /**
      * Handles the load command, to load the task list from disk.
-     * Approach to serializing and deserializing objects adapted from:
-     * <a href="https://www.geeksforgeeks.org/serialization-in-java/">GeeksforGeeks</a>
      *
      * @param filePath The arguments passed to the load command, which will be ignored.
      * @return The result of the load command.
      */
     private CommandResult loadCommandHandler(String filePath) {
-        Optional<String> filePathError = Kipp.getErrorIfInvalidFilePath(filePath);
+        return this.loadSaveCommandHanlderHelper(filePath, true);
+    }
+
+    /**
+     * A helper command to handle both save and load commands.
+     * The approach to serializing and deserializing objects was adapted from:
+     * <a href="https://www.geeksforgeeks.org/serialization-in-java/">GeeksforGeeks</a>
+     *
+     * @param filePath
+     * @param isLoad
+     * @return
+     */
+    private CommandResult loadSaveCommandHanlderHelper(String filePath, boolean isLoad) {
+        String action = isLoad ? "load" : "save";
+        String preposition = isLoad ? "from" : "to";
+
+        Optional<String> filePathError = this.getErrorIfInvalidFilePath(filePath);
         if (filePathError.isPresent()) {
             return CommandResult.createUsageErrorResult(filePathError.get());
         }
 
-        File file = new File(filePath);
-        if (!file.exists()) {
-            return CommandResult.createUsageErrorResult("The file " + filePath + " does not exist.");
+        if (isLoad && !new File(filePath).exists()) {
+            return CommandResult.createUsageErrorResult(String.format("I'm sorry %s, this file %s doesn't exist.",
+                    this.userName, filePath));
         }
 
         try {
             Storage<TaskList> taskListStorage = new Storage<>(filePath, TaskList.class);
-            this.taskList = taskListStorage.load();
+            if (isLoad) {
+                this.taskList = taskListStorage.load();
+            } else {
+                taskListStorage.save(this.taskList);
+            }
         } catch (StorageException e) {
             return CommandResult.createUnexpectedErrorResult(
-                    "Something went wrong, I couldn't load your task list from "
-                            + filePath + ". I'm leaving it as is.");
+                    String.format("Sorry %s, I'm afraid something's wrong. I couldn't %s your task list %s %s.",
+                            this.userName, action, preposition, filePath));
         }
-        return CommandResult.createSuccessResult("I've loaded your task list from " + filePath + ".");
+
+        return CommandResult.createSuccessResult(String.format("Roger that %s. I've %s your task list %s %s.",
+                this.userName, action, preposition, filePath)
+        );
+    }
+
+    /**
+     * Checks is a file path is valid, and returns an explanation of the error if it is not.
+     *
+     * @param filePath The file path to be checked.
+     * @return An optional error message if the file path is invalid.
+     */
+    private Optional<String> getErrorIfInvalidFilePath(String filePath) {
+        if (!filePath.endsWith(".txt")) {
+            return Optional.of(String.format("Remember %s! I can only save and load files with a .txt extension.",
+                    this.userName));
+        }
+
+        File file = new File(filePath);
+        if (file.isAbsolute()) {
+            return Optional.of(String.format("Sorry %s, I can only save and load files with a relative path. "
+                            + "You've given me an absolute one.",
+                    this.userName));
+        }
+
+        return Optional.empty();
     }
 
     /**
@@ -219,7 +305,7 @@ public class Kipp {
      */
     private CommandResult listCommandHandler(String args) {
         return this.taskList.getLength() == 0 ? CommandResult.createSuccessResult(
-                "You have 0 tasks on your list.")
+                String.format("Lucky you %s! Guess you're done for the day.", this.userName))
                 : CommandResult.createSuccessResult(this.taskList.toString());
     }
 
@@ -260,8 +346,9 @@ public class Kipp {
 
         if (isComplete == this.taskList.getTask(taskIdx).isCompleted()) {
             return CommandResult.createUsageErrorResult(
-                    "Task was already marked " + (isComplete ? "completed." : "incomplete.")
-                            + "I'm leaving it as is." + "\n" + this.taskList.getTask(taskIdx).toString());
+                    String.format("Hey %s! The task you asked for was already marked %s. I'm leaving it as is:\n%s",
+                            this.userName, isComplete ? "completed" : "incomplete",
+                            this.taskList.getTask(taskIdx).toString()));
         }
 
         if (isComplete) {
@@ -270,8 +357,9 @@ public class Kipp {
             this.taskList.setTaskIncomplete(taskIdx);
         }
         return CommandResult.createSuccessResult(
-                "Roger that. Marking task as " + (isComplete ? "completed." : "incomplete.")
-                        + "\n" + this.taskList.getTask(taskIdx).toString());
+                String.format("Roger that %s. Marking task as %s, good work!\n%s",
+                        this.userName, isComplete ? "completed" : "incomplete",
+                        this.taskList.getTask(taskIdx).toString()));
     }
 
     /**
@@ -290,9 +378,9 @@ public class Kipp {
         Task deletedTask = this.taskList.deleteTask(taskIdx);
 
         return CommandResult.createSuccessResult(
-                "Roger that. I've deleted the following task from your list:\n"
-                        + deletedTask.toString() + "\nNote, you have "
-                        + this.taskList.getLength() + " tasks in your list.");
+                String.format("Roger that %s. I've deleted the following task from your list:"
+                                + "\n%s\nYou still have %d tasks in your roster.",
+                        this.userName, deletedTask.toString(), this.taskList.getLength()));
     }
 
     /**
@@ -307,13 +395,14 @@ public class Kipp {
         try {
             taskIdx = Integer.parseInt(taskIdxStr) - 1;
         } catch (NumberFormatException e) {
-            return Optional.of("Please provide a valid task number.");
+            return Optional.of(String.format("%s! This is no time for games. Please provide a valid task number.",
+                    this.userName));
         }
 
         if (taskIdx < 0 || taskIdx >= this.taskList.getLength()) {
-            return Optional.of("A task with the number "
-                    + (taskIdx + 1) + " does not exist."
-                    + " Please provide a " + "valid task number.");
+            return Optional.of(String.format("Are you alright %s? A task with the number %d does not exist. "
+                            + "Please provide a valid task number.",
+                    this.userName, taskIdx + 1));
         }
 
         return Optional.empty();
@@ -328,7 +417,8 @@ public class Kipp {
     private CommandResult addTodoCommandHandler(String args) {
         if (args.isBlank()) {
             return CommandResult.createUsageErrorResult(
-                    "Please provide a non-empty task description.");
+                    String.format("Dear %s, I can't add an empty task to your list. Please provide a task description.",
+                            this.userName));
         }
 
         this.taskList.addTask(new ToDoTask(args));
@@ -345,7 +435,7 @@ public class Kipp {
         String[] argsSplit = args.split(" /by ", 2);
         if (argsSplit.length < 2) {
             return CommandResult.createUsageErrorResult(
-                    "Please provide a task description and deadline.");
+                    String.format("Focus %s! I need a task description and a deadline to add a task.", this.userName));
         }
 
         LocalDate deadlineDate;
@@ -353,7 +443,7 @@ public class Kipp {
             deadlineDate = LocalDate.parse(argsSplit[1]);
         } catch (Exception e) {
             return CommandResult.createUsageErrorResult(
-                    "Please provide a valid deadline in the format yyyy-mm-dd.");
+                    String.format("%s, I need a valid deadline in the format yyyy-mm-dd.", this.userName));
         }
 
         this.taskList.addTask(new DeadlineTask(argsSplit[0], deadlineDate));
@@ -370,7 +460,8 @@ public class Kipp {
         String[] argsSplit = args.split(" /from ", 2);
         if (argsSplit.length < 2) {
             return CommandResult.createUsageErrorResult(
-                    "Please provide a valid task description, start time and end time.");
+                    String.format("%s, I need a task description and a start and end time to add an event.",
+                            this.userName));
         }
 
         String[] startEndDate = argsSplit[1].split(" /to ", 2);
@@ -384,8 +475,8 @@ public class Kipp {
             endDate = LocalDate.parse(startEndDate[1]);
         } catch (Exception e) {
             return CommandResult.createUsageErrorResult(
-                    "Please provide a valid start and end time in the format "
-                            + "yyyy-mm-dd, separated by /to.");
+                    String.format("Listen to me %s! I need a valid start and end date from you.",
+                            this.userName));
         }
 
         this.taskList.addTask(new EventTask(argsSplit[0], startDate, endDate));
@@ -400,7 +491,9 @@ public class Kipp {
      */
     private CommandResult findTaskCommandHandler(String args) {
         if (args.isBlank()) {
-            return CommandResult.createUsageErrorResult("Please provide a keyword to search for.");
+            return CommandResult.createUsageErrorResult(String.format(
+                    "%s, I can't help you find nothing. "
+                            + "Please provide a keyword to search for.", this.userName));
         }
 
         TaskList resultTaskList = new TaskList();
@@ -410,11 +503,12 @@ public class Kipp {
 
         if (resultTaskList.getLength() == 0) {
             return CommandResult.createSuccessResult(
-                    "No tasks found containing the keyword: " + args);
+                    String.format("Oh no %s! No tasks found containing the keyword: %s", this.userName, args));
         }
 
         return CommandResult.createSuccessResult(
-                "Roger, here are the tasks I've found matching the keyword: " + args + "\n" + resultTaskList);
+                String.format("Roger, here are the tasks I've found matching the keyword: %s\n%s",
+                        args, resultTaskList.toString()));
     }
 
     /**
@@ -423,8 +517,9 @@ public class Kipp {
      * @return Formatted message to show successful task addition.
      */
     private String getTaskAddedMessage() {
-        return "Roger that, I've added the following task to your list:\n"
-                + this.taskList.getTask(this.taskList.getLength() - 1).toString()
-                + "\nNote, you have " + this.taskList.getLength() + " tasks in your list.";
+        return String.format("Roger that %s, I've added the following task to your list:\n"
+                        + "%s\nNote, you have %d tasks in your list.",
+                this.userName, this.taskList.getTask(this.taskList.getLength() - 1).toString(),
+                this.taskList.getLength());
     }
 }

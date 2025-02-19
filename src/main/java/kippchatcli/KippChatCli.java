@@ -16,27 +16,16 @@ public class KippChatCli {
      * Constructor for KippChatCli class.
      */
     private KippChatCli() {
-        // If test username provided in environment variable, use it.
-        if (System.getenv("KIPP_CHAT_TEST_USERNAME") != null) {
-            this.username = System.getenv("KIPP_CHAT_TEST_USERNAME");
-        } else if (System.getProperty("user.name") != null) {
-            this.username = System.getProperty("user.name");
+        String systemUserName = System.getProperty("user.name");
+        if (systemUserName != null && !systemUserName.isBlank()) {
+            this.username = systemUserName;
+            this.kipp = Kipp.createKipp(systemUserName);
         } else {
-            this.username = "Dr. Mann";
+            this.kipp = Kipp.createKipp();
+            this.username = this.kipp.getUserName();
         }
         this.scanner = new Scanner(System.in);
-        this.kipp = Kipp.createKipp();
     }
-
-    /**
-     * Factory method to create a new KippChatCli instance.
-     *
-     * @return The new KippChatCli instance.
-     */
-    public static KippChatCli createKippChatCli() {
-        return new KippChatCli();
-    }
-
 
     private static void printNameBadge(String name) {
         System.out.println("[" + name + "]");

@@ -5,195 +5,195 @@
 ██   ██ ██ ██      ██
 
 [KIPP]
-Hi there, this is KIPP.
+Well, hello there cooper-testuser. This is KIPP speaking.
 How can I help?
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
 I don't recognize that command.
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
 I don't recognize that command.
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Please provide a task description.
+Dear cooper-testuser, I can't add an empty task to your list. Please provide a task description.
 Example: todo <task description>
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Roger that, I've added the following task to your list:
+Roger that cooper-testuser, I've added the following task to your list:
 [T][ ] fix spaceship
 Note, you have 1 tasks in your list.
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Please provide a task description and deadline.
+Focus cooper-testuser! I need a task description and a deadline to add a task.
 Example: deadline <task description> /by <deadline yyyy-mm-dd>
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Please provide a task description and deadline.
+Focus cooper-testuser! I need a task description and a deadline to add a task.
 Example: deadline <task description> /by <deadline yyyy-mm-dd>
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Please provide a task description and deadline.
+Focus cooper-testuser! I need a task description and a deadline to add a task.
 Example: deadline <task description> /by <deadline yyyy-mm-dd>
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Please provide a valid deadline in the format yyyy-mm-dd.
+cooper-testuser, I need a valid deadline in the format yyyy-mm-dd.
 Example: deadline <task description> /by <deadline yyyy-mm-dd>
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Please provide a valid task description, start time and end time.
+cooper-testuser, I need a task description and a start and end time to add an event.
 Example: event <task description> /from <start yyyy-mm-dd> /to <end yyyy-mm-dd>
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Please provide a valid task description, start time and end time.
+cooper-testuser, I need a task description and a start and end time to add an event.
 Example: event <task description> /from <start yyyy-mm-dd> /to <end yyyy-mm-dd>
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Please provide a valid task description, start time and end time.
+cooper-testuser, I need a task description and a start and end time to add an event.
 Example: event <task description> /from <start yyyy-mm-dd> /to <end yyyy-mm-dd>
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Please provide a valid start and end time in the format yyyy-mm-dd, separated by /to.
+Listen to me cooper-testuser! I need a valid start and end date from you.
 Example: event <task description> /from <start yyyy-mm-dd> /to <end yyyy-mm-dd>
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Please provide a valid start and end time in the format yyyy-mm-dd, separated by /to.
+Listen to me cooper-testuser! I need a valid start and end date from you.
 Example: event <task description> /from <start yyyy-mm-dd> /to <end yyyy-mm-dd>
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Please provide a valid start and end time in the format yyyy-mm-dd, separated by /to.
+Listen to me cooper-testuser! I need a valid start and end date from you.
 Example: event <task description> /from <start yyyy-mm-dd> /to <end yyyy-mm-dd>
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
 1. [T][ ] fix spaceship
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Roger that. Marking task as completed.
+Roger that cooper-testuser. Marking task as completed, good work!
 [T][x] fix spaceship
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Roger that. Marking task as incomplete.
+Roger that cooper-testuser. Marking task as incomplete, good work!
 [T][ ] fix spaceship
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
 1. [T][ ] fix spaceship
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Please provide a valid task number.
+Are you alright cooper-testuser? A task with the number 3 does not exist. Please provide a valid task number.
 Example: mark <task number>
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Please provide a valid task number.
+Are you alright cooper-testuser? A task with the number 3 does not exist. Please provide a valid task number.
 Example: mark <task number>
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Please provide a valid task number.
+Are you alright cooper-testuser? A task with the number 3 does not exist. Please provide a valid task number.
 Example: unmark <task number>
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Please provide a valid task number.
+Are you alright cooper-testuser? A task with the number 3 does not exist. Please provide a valid task number.
 Example: unmark <task number>
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
 1. [T][ ] fix spaceship
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-I've saved your task list to KIPP.txt.
+I don't recognize that command.
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Please provide a valid task number.
+Are you alright cooper-testuser? A task with the number 3 does not exist. Please provide a valid task number.
 Example: delete <task number>
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
 1. [T][ ] fix spaceship
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Please provide a valid task number.
+Are you alright cooper-testuser? A task with the number 2 does not exist. Please provide a valid task number.
 Example: delete <task number>
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
 1. [T][ ] fix spaceship
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Roger that. I've deleted the following task from your list:
+Roger that cooper-testuser. I've deleted the following task from your list:
 [T][ ] fix spaceship
-Note, you have 0 tasks in your list.
+You still have 0 tasks in your roster.
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Please provide a valid task number.
+Are you alright cooper-testuser? A task with the number 1 does not exist. Please provide a valid task number.
 Example: delete <task number>
 ---
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-I've loaded your task list from KIPP.txt.
+I don't recognize that command.
 ---
-[cooper-testuser]
----
-[KIPP]
-1. [T][ ] fix spaceship
----
-[cooper-testuser]
+[reuben]
 ---
 [KIPP]
-Goodbye. Safe travels.
+Lucky you cooper-testuser! Guess you're done for the day.
+---
+[reuben]
+---
+[KIPP]
+Goodbye cooper-testuser and venture safely. I'll be here if you need me.
 ---
