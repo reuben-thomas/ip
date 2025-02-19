@@ -28,9 +28,7 @@ public class Kipp {
             ██   ██ ██ ██      ██
             """;
     private static final String NAME = "KIPP";
-    private static final String TASK_LIST_SAVE_FILE_PATH = "KIPP.txt";
     private static final String SIGN_OUT_MESSAGE = "Goodbye. Safe travels.";
-    private static final String INVALID_TASK_INDEX_MESSAGE = "Please provide a valid task number.";
     private TaskList taskList;
     private CommandHandler commandHandler;
 
