@@ -1,6 +1,8 @@
 .root {
   main-color: rgb(15, 15, 35);
   -fx-background-color: main-color;
+  -fx-background-image: url("../images/stars.jpg");
+  -fx-background-size: stretch;
 }
 
 .text-field {

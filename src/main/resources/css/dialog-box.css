@@ -1,8 +1,9 @@
 .label {
-  -fx-border-color: #d55e00;
+  -fx-border-color: #cfcfcf;
   -fx-border-width: 2px;
   -fx-font: 11px "JetBrains Mono";
   -fx-text-fill: #ffffff;
+  -fx-background-color: rgba(0, 0, 0, 0.5);
 }
 
 .reply-label {
