@@ -1,0 +1,13 @@
+.label {
+  -fx-border-color: #cfcfcf;
+  -fx-border-width: 2px;
+  -fx-font: bold "JetBrains Mono";
+  -fx-font-size: 11px;
+  -fx-text-fill: #ffffff;
+  -fx-background-color: rgba(0, 0, 0, 0.5);
+}
+
+#displayPicture {
+  -fx-border-color: #cfcfcf;
+  -fx-border-width: 2px;
+}
