@@ -1,22 +1,22 @@
 # KIPP User Guide
 
-![KIPP Detonates](https://github.com/reuben-thomas/ip/blob/master/docs/images/Ui.png)
+<img src="images/Ui.png" class="img-responsive" alt="Ui Screenshot"> </div>
 
 > The star background from the James Webb Space Telescope was taken from their [Flickr page.](https://www.flickrcom/photos/nasawebbtelescope/52404135772/in/album-72177720301006030/), and is permitted for non-commercial use as per the guidelines [here](https://www.nasa.gov/nasa-brand-center/images-and-media/)
 > References to KIPP and image icons were taken from the comic [Absolute Zero](https://thefilmstage.com/read-christopher-nolan-penned-interstellar-prequel-comic-telling-dr-manns-story/)
 
 
 KIPP is a task manager assistant, accessible through a CLI or a GUI. KIPP is named after one of the robots from
-interstellar, set to detonate by Dr Mann in order to sabotage the Endurance mission. This assistant on the other
+Interstellar, set to detonate by Dr Mann in order to sabotage the Endurance mission. This assistant on the other
 hand, won't detonate anytime soon, trust me.
 
 In fact, rather than sabotaging your tasks, KIPP is here to help you manage them. If you're a competent typist,
-you'll be able to take the greatest advantage of KIPP's features over a conventional GUI based task manager.
+you'll be able to take the greatest advantage of KIPP's features over a conventional GUI-based task manager.
 
 ## Quick Start
 
 1. Ensure you have Java `17` installed on your Computer.
-   > **Mac users**: Ensure you have a specific verion of JDK as
+   > **Mac users**: Ensure you have a specific version of JDK as
    described [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 2. Download the latest `kipp.jar` from [here](https://github.com/reuben-thomas/ip/releases)
 3. Copy the file into the directory where you'd like these tasks to be stored.
@@ -25,10 +25,10 @@ you'll be able to take the greatest advantage of KIPP's features over a conventi
     java -jar kippChat.jar
     ```
 5. You should see KIPP say hello. If you're unfamiliar with any of the commands, type `help` to see all available
-   commandds and what they can do. Some example commands you can try include:
-    - `hello` - Get KIPP to say hello right back.
-    - `todo <task description>` - Add a to-do task to your list.
-    - `bye` - Exit KIPP.
+   commands and what they can do. Some example commands you can try include:
+   - `hello` - Get KIPP to say hello right back.
+   - `todo <task description>` - Add a to-do task to your list.
+   - `bye` - Exit KIPP.
 
 ## Command Summary
 
@@ -52,8 +52,8 @@ you'll be able to take the greatest advantage of KIPP's features over a conventi
 
 **Q**: How do I transfer my tasks to another Computer with KIPP installed?
 
-**A**: From the KIPP interface, the `saveto` command to save your tasks to a text file. Copy this file to the other 
-Computer. Then, from the KIPP interface on the other Computer, use the `loadfrom` command to load the tasks from the 
+**A**: From the KIPP interface, the `saveto` command to save your tasks to a text file. Copy this file to the other
+Computer. Then, from the KIPP interface on the other Computer, use the `loadfrom` command to load the tasks from the
 text file.
 
 ## Citations & References
