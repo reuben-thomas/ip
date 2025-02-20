@@ -1,6 +1,6 @@
 # KIPP User Guide
 
-<img src="images/Ui.png" class="img-responsive" alt="Ui Screenshot"> </div>
+<img src="images/Ui.png" class="img-responsive" alt="Ui Screenshot">
 
 > The star background from the James Webb Space Telescope was taken from their [Flickr page.](https://www.flickrcom/photos/nasawebbtelescope/52404135772/in/album-72177720301006030/), and is permitted for non-commercial use as per the guidelines [here](https://www.nasa.gov/nasa-brand-center/images-and-media/)
 > References to KIPP and image icons were taken from the comic [Absolute Zero](https://thefilmstage.com/read-christopher-nolan-penned-interstellar-prequel-comic-telling-dr-manns-story/)
