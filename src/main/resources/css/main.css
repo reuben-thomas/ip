@@ -2,33 +2,29 @@
   main-color: rgb(15, 15, 35);
   -fx-background-color: main-color;
   -fx-background-image: url("../images/stars.jpg");
-  -fx-background-size: fill;
+  -fx-background-size: contain;
 }
 
 .text-field {
   -fx-background-color: #ffffff;
-  -fx-font: bold "JetBrains Mono";
-  -fx-font-size: 11px;
+  -fx-font: bold 10px "JetBrains Mono";
 }
 
 .button {
   -fx-background-color: #18de6b;
-  -fx-font: bold "JetBrains Mono";
-  -fx-font-size: 11px;
+  -fx-font: bold 10px "JetBrains Mono";
   -fx-text-fill: #ffffff;
 }
 
 .button:hover {
   -fx-background-color: #1d9951;
-  -fx-font: bold "JetBrains Mono";
-  -fx-font-size: 11px;
+  -fx-font: bold 10px "JetBrains Mono";
   -fx-text-fill: #ffffff;
 }
 
 .button:pressed {
   -fx-background-color: #ff580a;
-  -fx-font: bold "JetBrains Mono";
-  -fx-font-size: 11px;
+  -fx-font: bold 10px "JetBrains Mono";
   -fx-text-fill: #ffffff;
 }
 

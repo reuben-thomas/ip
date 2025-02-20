@@ -1,8 +1,7 @@
 .label {
   -fx-border-color: #cfcfcf;
   -fx-border-width: 2px;
-  -fx-font: bold "JetBrains Mono";
-  -fx-font-size: 11px;
+  -fx-font: bold 10px "JetBrains Mono";
   -fx-text-fill: #ffffff;
   -fx-background-color: rgba(0, 0, 0, 0.5);
 }
