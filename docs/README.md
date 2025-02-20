@@ -1,29 +1,53 @@
-# kipp User Guide
+# KIPP User Guide
 
-// Update the title above to match the actual product name
+![KIPP Detonates](https://github.com/reuben-thomas/ip/blob/master/docs/images/Ui.png)
 
-// Product screenshot goes here
+KIPP is a task manager assistant, accessible through a CLI or a GUI. KIPP is named after one of the robots from
+interstellar, set to detonate by Dr Mann in order to sabotage the Endurance mission. This assistant on the other
+hand, won't detonate anytime soon, trust me.
 
-// Product intro goes here
+In fact, rather than sabotaging your tasks, KIPP is here to help you manage them. If you're a competent typist,
+you'll be able to take the greatest advantage of KIPP's features over a conventional GUI based task manager.
 
-## Adding deadlines
+## Quick Start
 
-// Describe the action and its outcome.
+1. Ensure you have Java `17` installed on your Computer.
+   > **Mac users**: Ensure you have a specific verion of JDK as
+   described [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+2. Download the latest `kipp.jar` from [here](https://github.com/reuben-thomas/ip/releases)
+3. Copy the file into the directory where you'd like these tasks to be stored.
+4. Open a terminal and navigate into the directory where `kipp.jar` is located. Use the following command to run KIPP:
+    ```shell
+    java -jar kippChat.jar
+    ```
+5. You should see KIPP say hello. If you're unfamiliar with any of the commands, type `help` to see all available
+   commandds and what they can do. Some example commands you can try include:
+    - `hello` - Get KIPP to say hello right back.
+    - `todo <task description>` - Add a to-do task to your list.
+    - `bye` - Exit KIPP.
 
-// Give examples of usage
+## Command Summary
 
-Example: `keyword (optional arguments)`
+| Command    | Description                                             | Example                                                        |
+|------------|---------------------------------------------------------|----------------------------------------------------------------|
+| `help`     | Displays the available commands and their descriptions. | `help`                                                         |
+| `hello`    | Greeting from KIPP.                                     | `hello`                                                        |
+| `bye`      | Exit                                                    | `bye`                                                          |
+| `list`     | List all tasks on your list.                            | `list`                                                         |
+| `mark`     | Set task as completed.                                  | `mark <task number>`                                           |
+| `unmark`   | Set task as incomplete.                                 | `unmark <task number>`                                         |
+| `todo`     | Add a to-do task to your list.                          | `todo <task description>`                                      |
+| `deadline` | Add a task with a deadline to your list.                | `deadline <task description> /by <yyyy-mm-dd>`                 |
+| `event`    | Add a task with a start and end date.                   | `event <task description> /from <yyyy-mm-dd> /to <yyyy-mm-dd>` |
+| `delete`   | Delete a task by task number.                           | `delete <task number>`                                         |
+| `saveto`   | Save the current task list to disk as a text file.      | `saveto <relative_file_path.txt>`                              |
+| `loadfrom` | Load a previously saved task list from a text file.     | `loadfrom <relative_file_path.txt>`                            |
+| `find`     | Find tasks containing a keyword.                        | `find <keyword>`                                               |
 
-// A description of the expected outcome goes here
+## FAQ
 
-```
-expected output
-```
+**Q**: How do I transfer my tasks to another Computer with KIPP installed?
 
-## Feature ABC
-
-// Feature details
-
-## Feature XYZ
-
-// Feature details
+**A**: From the KIPP interface, the `saveto` command to save your tasks to a text file. Copy this file to the other 
+Computer. Then, from the KIPP interface on the other Computer, use the `loadfrom` command to load the tasks from the 
+text file.
