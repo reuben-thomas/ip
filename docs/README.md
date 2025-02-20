@@ -2,6 +2,10 @@
 
 ![KIPP Detonates](https://github.com/reuben-thomas/ip/blob/master/docs/images/Ui.png)
 
+> The star background from the James Webb Space Telescope was taken from their [Flickr page.](https://www.flickrcom/photos/nasawebbtelescope/52404135772/in/album-72177720301006030/), and is permitted for non-commercial use as per the guidelines [here](https://www.nasa.gov/nasa-brand-center/images-and-media/)
+> References to KIPP and image icons were taken from the comic [Absolute Zero](https://thefilmstage.com/read-christopher-nolan-penned-interstellar-prequel-comic-telling-dr-manns-story/)
+
+
 KIPP is a task manager assistant, accessible through a CLI or a GUI. KIPP is named after one of the robots from
 interstellar, set to detonate by Dr Mann in order to sabotage the Endurance mission. This assistant on the other
 hand, won't detonate anytime soon, trust me.
@@ -51,3 +55,9 @@ you'll be able to take the greatest advantage of KIPP's features over a conventi
 **A**: From the KIPP interface, the `saveto` command to save your tasks to a text file. Copy this file to the other 
 Computer. Then, from the KIPP interface on the other Computer, use the `loadfrom` command to load the tasks from the 
 text file.
+
+## Citations & References
+
+- The star background from the James Webb Space Telescope was taken from their [Flickr page.](https://www.flickr.com/photos/nasawebbtelescope/52404135772/in/album-72177720301006030/), and is permitted for non-commercial use as per the guidelines [here](https://www.nasa.gov/nasa-brand-center/images-and-media/)
+- References to KIPP and image icons were taken from the comic [Absolute Zero](https://thefilmstage.com/read-christopher-nolan-penned-interstellar-prequel-comic-telling-dr-manns-story/)
+- GitHub Copilot was used as an auto-complete tool throughout this project.

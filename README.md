@@ -40,5 +40,6 @@ Java files to another folder outside of this folder path), as this is the defaul
 expect to find Java files.
 
 ## Citations & References
-
-- Github Copilot was used as an auto-complete tool throughout this project.
+- The star background from the James Webb Space Telescope was taken from their [Flickr page.](https://www.flickr.com/photos/nasawebbtelescope/52404135772/in/album-72177720301006030/), and is permitted for non-commercial use as per the guidelines [here](https://www.nasa.gov/nasa-brand-center/images-and-media/)
+- References to KIPP and image icons were taken from the comic [Absolute Zero](https://thefilmstage.com/read-christopher-nolan-penned-interstellar-prequel-comic-telling-dr-manns-story/)
+- GitHub Copilot was used as an auto-complete tool throughout this project.

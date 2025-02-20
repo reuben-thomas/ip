@@ -2,7 +2,7 @@
   main-color: rgb(15, 15, 35);
   -fx-background-color: main-color;
   -fx-background-image: url("../images/stars.jpg");
-  -fx-background-size: stretch;
+  -fx-background-size: fill;
 }
 
 .text-field {
